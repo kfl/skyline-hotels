@@ -64,6 +64,7 @@ public class Skyline_hotelsServlet extends HttpServlet {
 					);
 			list.add(h);
 		}
+		in.close();
 		return list.toArray(new Hotel[0]);
 	}
 	
