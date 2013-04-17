@@ -33,7 +33,7 @@ function listHotel(div){
 }
 
 
-d3.json("assets/data/hotel_data.json")
+d3.json("/skyline_hotels")
     .get(function(error, hs) {
         hotels = hs;
         populateList(hs.slice(0,100));
