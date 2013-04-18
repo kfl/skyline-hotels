@@ -68,6 +68,9 @@ function getHotels() {
     var treviRange = $( "#trevi-range" ).slider("values");
     var proxRange = $( "#proximity-range" ).slider("values");
     var rateRange = $( "#rate-range" ).slider("values");
+    var expedia =  $( "#expedia-range" ).slider("value");
+    var tripad =  $( "#tripad-range" ).slider("value");
+
     console.log(rateRange);
     jQuery.getJSON("/skyline_hotels", 
                    {highRateStart: rateRange[0],
@@ -80,8 +83,8 @@ function getHotels() {
                     distFromTreviFountainEnd: treviRange[1],
                     pool: $("#pool").is(':checked'),
                     internet: $("#internet").is(':checked'),
-                    hotelRatingStart: $( "#expedia-range" ).slider("value"),
-                    tripAdvisorRatingStart: $( "#tripad-range" ).slider("value")
+                    hotelRatingStart: expedia == 0 ? -1 : expedia,
+                    tripAdvisorRatingStart: tripad == 0 ? -1 : tripad,
                    },
                    function(hs) {
                        hotels = hs;
