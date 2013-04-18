@@ -79,7 +79,9 @@ function getHotels() {
                     distFromTreviFountainStart: treviRange[0],
                     distFromTreviFountainEnd: treviRange[1],
                     pool: $("#pool").is(':checked'),
-                    internet: $("#internet").is(':checked')
+                    internet: $("#internet").is(':checked'),
+                    hotelRatingStart: $( "#expedia-range" ).slider("value"),
+                    tripAdvisorRatingStart: $( "#tripad-range" ).slider("value")
                    },
                    function(hs) {
                        hotels = hs;
@@ -155,51 +157,29 @@ $(function() {
         }
     });
 
-    // d3.json("/skyline_hotels")
-    //     .get(function(error, hs) {
-    //         hotels = hs;
-    //         populateList(hs.slice(0,100));
-    //     });
+    $( "#tripad-range" ).slider({
+        range: "max",
+        min: 0,
+        max: 5,
+        step: 0.5,
+        change: getHotels,
+        slide: function( event, ui ) {
+            $("#tripad-lab").text(ui.value);
+        }
+    });
+
+    $( "#expedia-range" ).slider({
+        range: "max",
+        min: 0,
+        max: 5,
+        step: 0.5,
+        change: getHotels,
+        slide: function( event, ui ) {
+            $("#expedia-lab").text(ui.value);
+        }
+    });
+
+    // Get an initial list of hotels
     getHotels();
  
-
-
-    // $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-    //                     " - $" + $( "#slider-range" ).slider( "values", 1 ) );
 });
-
-
-// $('#ListMapTab a').click(function (e) {
-//     e.preventDefault();
-//     $(this).tab('show');
-// });
-
-// d3.tsv("data/hotel_data.tsv")
-//     .row(function(h) {
-//         return {
-//             order: +h.order,
-//             id: +h.id,
-//             name: h.name,	
-//             address1: h.address1,
-//             city: h.city,
-//             postalCode: h.postalCode,
-//             propertyCategory: +h.propertyCategory,
-//             hotelRating: +h.hotelRating,
-//             confidenceRating: +h.confidenceRating,
-//             tripAdvisorRating: +h.tripAdvisorRating,
-//             highRate: +h.highRate,
-//             lat: +h.lat,
-//             lon: +h.long,
-//             proximityDistance: +h.proximityDistance,
-//             internet: h['Internet Access Available'] == 'Y' ? true : false,
-//             pool: h.Pool == 'Y' ? true : false,
-//             distFromColosseum: +h.DistFromColosseum,
-//             distFromTreviFountain: +h.DistFromTreviFountain,
-//             picture: h.picture
-//         };
-//     })
-//     .get(function(error, hs) {
-//         hotels = hs;
-//         d3.select("body").append("pre").text(JSON.stringify(hotels));
-//     });
-
