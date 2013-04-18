@@ -43,7 +43,13 @@ public class Hotel implements Record {
 		this.pool = pool;
 		this.distFromColosseum = distFromColosseum;
 		this.distFromTreviFountain = distFromTreviFountain;
-		this.picture = picture;
+		// custom conversion for this application: data might be placed in different directories
+		int numericId = Integer.parseInt(id);
+		String path = "";
+		if (numericId <= 297078)
+			path = "hotel_images/low/";
+		else path = "hotel_images/high/";
+		this.picture = path + picture;
 	}
 	
 	public String toJSON(int order) {

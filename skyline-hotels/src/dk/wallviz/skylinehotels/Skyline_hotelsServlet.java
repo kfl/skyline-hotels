@@ -11,10 +11,38 @@ public class Skyline_hotelsServlet extends HttpServlet {
 		// retrieving hotel data
 		Hotel[] hotels = getData();
 		//resp.getWriter().println(hotels.length+" hotels read<br/>");
+		
 		// filtering - not efficient, but simple code
 		HotelPredicate predicate = buildFilter(req);
 		hotels = filter(hotels,predicate);
 		//resp.getWriter().println(hotels.length+" hotels filtered<br/>");
+		
+		// skyline
+		String skylineOf = req.getParameter("skylineOf");
+		if (skylineOf != null) {
+			Attributes atts = Attributes.parse(skylineOf,",");
+			Skyline sky = new Skyline(atts);
+			hotels = sky.execute(hotels);
+			//resp.getWriter().println(hotels.length+" hotels in the skyline<br/>");
+		}
+		
+		// sorting
+		String sortBy = req.getParameter("sortBy");
+		if (sortBy != null) {
+			if (sortBy.equals("skyline")) {
+				RepresentativeSkyline rep = new RepresentativeSkyline();
+				hotels = rep.execute(hotels);
+			}
+			else {
+			int attribute = Attributes.getAttribute(sortBy); 
+			String sortType = req.getParameter("sortType");
+			boolean asc = true;
+			if (sortType != null && sortType.equals("desc"))
+				asc = false;
+			Arrays.sort(hotels,new HotelComparator(attribute,asc));
+			}
+		}
+		
 		resp.setContentType("application/json");
 		resp.getWriter().println(toJSON(hotels));
 	}
