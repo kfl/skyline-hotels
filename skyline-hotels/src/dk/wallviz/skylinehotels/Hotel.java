@@ -46,10 +46,11 @@ public class Hotel implements Record {
 		// custom conversion for this application: data might be placed in different directories
 		int numericId = Integer.parseInt(id);
 		String path = "";
+		String[] parts = picture.split("/");
 		if (numericId <= 297078)
-			path = "hotel_images/low/";
-		else path = "hotel_images/high/";
-		this.picture = path + picture;
+			path = parts[0]+"/low/"+parts[1];
+		else path = parts[0]+"/high/"+parts[1];
+		this.picture = path;
 	}
 	
 	public String toJSON(int order) {
