@@ -52,7 +52,7 @@ function htmlHotel(hotel){
     var imgP = /low|high/.test(hotel.picture) ? 
         'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg"
 
-    return '<img class="media-object pull-left" src="'+imgP+'">'+
+    return '<img class="media-object pull-left img-polaroid" src="'+imgP+'">'+
         '<div class="media-body"><h4 class="media-heading">'+hotel.name+'</h4>'+
         '<p>'+hotel.address1+'<br />'+
         hotel.postalCode+' '+hotel.city+'<br />'+
@@ -70,22 +70,33 @@ function getHotels() {
     var rateRange = $( "#rate-range" ).slider("values");
     var expedia =  $( "#expedia-range" ).slider("value");
     var tripad =  $( "#tripad-range" ).slider("value");
+    var sorting = $( "#sortby" ).val();
 
-    console.log(rateRange);
-    jQuery.getJSON("/skyline_hotels", 
-                   {highRateStart: rateRange[0],
-                    highRateEnd: rateRange[1],
-                    proximityDistanceStart: proxRange[0],
-                    proximityDistanceEnd: proxRange[1],
-                    distFromColosseumStart: colRange[0],
-                    distFromColosseumEnd: colRange[1],
-                    distFromTreviFountainStart: treviRange[0],
-                    distFromTreviFountainEnd: treviRange[1],
-                    pool: $("#pool").is(':checked'),
-                    internet: $("#internet").is(':checked'),
-                    hotelRatingStart: expedia == 0 ? -1 : expedia,
-                    tripAdvisorRatingStart: tripad == 0 ? -1 : tripad,
-                   },
+    console.log(sorting);
+
+    var query = {highRateStart: rateRange[0],
+                 highRateEnd: rateRange[1],
+                 proximityDistanceStart: proxRange[0],
+                 proximityDistanceEnd: proxRange[1],
+                 distFromColosseumStart: colRange[0],
+                 distFromColosseumEnd: colRange[1],
+                 distFromTreviFountainStart: treviRange[0],
+                 distFromTreviFountainEnd: treviRange[1],
+                 pool: $("#pool").is(':checked'),
+                 internet: $("#internet").is(':checked'),
+                 hotelRatingStart: expedia == 0 ? -1 : expedia,
+                 tripAdvisorRatingStart: tripad == 0 ? -1 : tripad,
+                }
+    if (sorting != "default" ) {
+        var parts = sorting.split("-");
+        query['sortBy'] = parts[0];
+        if (parts.length > 1) query['sortType'] = parts[1];
+
+    }
+
+
+    jQuery.getJSON("/skyline_hotels",
+                   query,
                    function(hs) {
                        hotels = hs;
                        populateList(hs.slice(0,100));
@@ -114,6 +125,7 @@ $(function() {
 
 
     $(':checkbox').change(getHotels);
+    $("#sortby").change(getHotels);
 
     $( "#colosseum-range" ).slider({
         range: true,
