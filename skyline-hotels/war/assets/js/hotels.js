@@ -78,6 +78,10 @@ function getHotels() {
 
     console.log(sorting);
     clearList();
+    $("#hotel-list")
+        .append($('<div><h4>Getting Data</h4>Kick back and put your feet up while we work.</div>')
+                .attr("class", "alert alert-block alert-info"));
+
 
     var query = {highRateStart: rateRange[0],
                  highRateEnd: rateRange[1],
@@ -103,9 +107,11 @@ function getHotels() {
                    query,
                    function(hs) {
                        hotels = hs;
+                       clearList();
                        populateList(hs.slice(0,100));
                    })
         .fail(function ( jqxhr, textStatus, error ) {
+            clearList();
             var err = textStatus + ', ' + error;
             $("#hotel-list")
                 .append($('<div><h4>Oh snap, something went wrong</h4>'+err+'</div>')
