@@ -77,7 +77,9 @@ function getHotels() {
                     distFromColosseumStart: colRange[0],
                     distFromColosseumEnd: colRange[1],
                     distFromTreviFountainStart: treviRange[0],
-                    distFromTreviFountainEnd: treviRange[1]
+                    distFromTreviFountainEnd: treviRange[1],
+                    pool: $("#pool").is(':checked'),
+                    internet: $("#internet").is(':checked')
                    },
                    function(hs) {
                        hotels = hs;
@@ -106,6 +108,7 @@ $(function() {
     }).resize();
 
 
+    $(':checkbox').change(getHotels);
 
     $( "#colosseum-range" ).slider({
         range: true,
