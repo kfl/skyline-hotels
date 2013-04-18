@@ -5,9 +5,8 @@ var hotels;
 
 function populateList(hs) {
     console.log("Populating list");
-    var items = "";
     var hlist = $("#hotel-list")
-    hlist.empty();
+
     $(hs.slice(0,50)).each(function(index, item) {
         hlist.append(
             $(document.createElement('li'))
@@ -57,7 +56,12 @@ function htmlHotel(hotel){
         '<p>'+hotel.address1+'<br />'+
         hotel.postalCode+' '+hotel.city+'<br />'+
         'High Rate: '+hotel.highRate.toFixed(2)+'€<br />'+
+        '(id: '+hotel.id+', order: '+hotel.order+')'+
         '</p></div>';
+}
+
+function clearList() {
+    $("#hotel-list").empty();
 }
 
 
@@ -73,6 +77,7 @@ function getHotels() {
     var sorting = $( "#sortby" ).val();
 
     console.log(sorting);
+    clearList();
 
     var query = {highRateStart: rateRange[0],
                  highRateEnd: rateRange[1],
@@ -94,13 +99,18 @@ function getHotels() {
 
     }
 
-
     jQuery.getJSON("/skyline_hotels",
                    query,
                    function(hs) {
                        hotels = hs;
                        populateList(hs.slice(0,100));
-                   });
+                   })
+        .fail(function ( jqxhr, textStatus, error ) {
+            var err = textStatus + ', ' + error;
+            $("#hotel-list")
+                .append($('<div><h4>Oh snap, something went wrong</h4>'+err+'</div>')
+                        .attr("class", "alert alert-block alert-error"));
+        });
 }
 
 $(function() {
