@@ -5,7 +5,7 @@ var hotels;
 
 function populateList(hs) {
     console.log("Populating list");
-    var hlist = $("#hotel-list")
+    var hlist = $("#hotel-list");
 
     $(hs.slice(0,50)).each(function(index, item) {
         hlist.append(
@@ -49,7 +49,7 @@ function listHotel(div){
 
 function htmlHotel(hotel){
     var imgP = /low|high/.test(hotel.picture) ? 
-        'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg"
+        'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg";
 
     return '<img class="media-object pull-left img-polaroid" src="'+imgP+'">'+
         '<div class="media-body"><h4 class="media-heading">'+hotel.name+'</h4>'+
