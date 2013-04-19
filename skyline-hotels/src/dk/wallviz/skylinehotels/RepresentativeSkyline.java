@@ -38,7 +38,7 @@ public class RepresentativeSkyline {
 					currentFurthestHotel = h;
 				}
 			}
-			System.out.println(currentMaxDistance);
+			//System.out.println(currentMaxDistance);
 			// Add h to the result and delete it from the unprocessed set
 			result.add(currentFurthestHotel);
 			unprocessed.remove(currentFurthestHotel);

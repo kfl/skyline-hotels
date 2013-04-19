@@ -29,7 +29,7 @@ public class Skyline_hotelsServlet extends HttpServlet {
 			if (sortBy != null && sortBy.equals("skyline")) {
 					RepresentativeSkyline rep = new RepresentativeSkyline(hotels,atts);
 					hotels = rep.execute();
-					System.out.println(hotels.length);
+					//System.out.println(hotels.length);
 				}
 			//resp.getWriter().println(hotels.length+" hotels in the skyline<br/>");
 		}
