@@ -36,8 +36,17 @@
          height: 64px;
       }
 
+      .ui-slider, .lastcheckbox {
+         margin-bottom: 2em;
+      }
+
+      #pool {
+         margin-bottom: 2em;
+      }
+
+
       #ListMapTabContent {
-      height: 800px;
+      height: 600px;
       overflow: auto;
       }
 
@@ -97,7 +106,7 @@
               <label>Proximity Distance: <span id="proximity-lab"></span></label>
               <div id="proximity-range"></div>
 
-              <label>High Rate: <span id="rate-lab"></span></label>
+              <label>Price per night: <span id="rate-lab"></span></label>
               <div id="rate-range"></div>
             </fieldset>
 
@@ -106,43 +115,50 @@
               <label class="checkbox">
                 <input type="checkbox" name="internet" id="internet" > Internet
               </label>
-              <label class="checkbox">
+              <label class="checkbox lastcheckbox">
                 <input type="checkbox" name="pool" id="pool"> Pool
               </label>
-              <!-- <label>Property Category</label> -->
-              <!-- <select multiple="multiple"> -->
-              <!--   <option>1</option> -->
-              <!--   <option>2</option> -->
-              <!--   <option>3</option> -->
-              <!--   <option>4</option> -->
-              <!--   <option>5</option> -->
-              <!-- </select> -->
-
             </fieldset>
               
             <fieldset>
               <legend>Rating</legend>
               <label>Minimum Expedia Rating: <span id="expedia-lab"></span></label>
               <div id="expedia-range"></div>
-               <!-- <label class="checkbox"> -->
-               <!--   <input type="checkbox" name="one-star"> 1 star -->
-               <!-- </label> -->
-               <!-- <label class="checkbox"> -->
-               <!--   <input type="checkbox" name="two-star"> 2 stars -->
-               <!-- </label> -->
-               <!-- <label class="checkbox"> -->
-               <!--   <input type="checkbox" name="three-star"> 3 stars -->
-               <!-- </label> -->
-               <!-- <label class="checkbox"> -->
-               <!--   <input type="checkbox" name="four-star"> 4 stars -->
-               <!-- </label> -->
-               <!-- <label class="checkbox"> -->
-               <!--   <input type="checkbox" name="five-star"> 5 stars -->
-               <!-- </label> -->
 
               <label>Minimum Trip Advisor Rating: <span id="tripad-lab"></span></label>
               <div id="tripad-range"></div>
             </fieldset>
+
+            <fieldset>
+              <legend>Suggest best hotels by:</legend>
+               <label class="checkbox">
+                 <input type="checkbox" name="skyline-opt" value="highRate">Price per night
+               </label>
+               <label class="checkbox">
+                 <input type="checkbox" name="skyline-opt"
+                 value="distFromColosseum">Shortest distance from
+                 Colosseum
+               </label>
+               <label class="checkbox">
+                 <input type="checkbox" name="skyline-opt"
+                 value="distFromTreviFountain">Shortest distance from
+                 Trevi Fountain
+               </label>
+               <label class="checkbox">
+                 <input type="checkbox" name="skyline-opt"
+                 value="proximityDistance">Shortest distance to city center
+               </label>
+               <label class="checkbox">
+                 <input type="checkbox" name="skyline-opt"
+                 value="hotelRating">Expedia rating
+               </label>
+               <label class="checkbox">
+                 <input type="checkbox" name="skyline-opt"
+                 value="tripAdvisorRating">Trip Advisor rating
+               </label>
+            </fieldset>
+
+
 
           </div><!--/.well -->
         </div><!--/span-->
@@ -158,13 +174,13 @@
                   <span class="add-on">Order by:</span>
                   <select id="sortby">
                     <option value="default">Default</option>
-                    <option value="highRate-asc">High Rate (lowest first)</option>
+                    <option value="skyline">Suggest Best Hotels (skyline)</option>
+                    <option value="highRate-asc">Price per night (lowest first)</option>
                     <option value="distFromColosseum-asc">Distance From Colosseum (shortest first)</option>
                     <option value="distFromTreviFountain-asc">Distance From Trevi Fountain (shortest first)</option>
                     <option value="proximityDistance-asc">Proximity Distance (shortest first)</option>
                     <option value="hotelRating-decs">Expedia Rating (highest first)</option>
                     <option value="tripAdvisorRating-decs">Trip Advisor Rating (highest first)</option>
-                    <option value="skyline">Skyline (best first)</option>
                   </select></div>
                 <ul id="hotel-list" class="media-list">
                 </ul>
