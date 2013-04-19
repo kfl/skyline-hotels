@@ -16,7 +16,7 @@ public class Attributes {
 	static final int PROXIMITY_DISTANCE = 3;
 	//static final int DIST_FROM_COLOSSEUM = 4;
 	//static final int DIST_FROM_TREVI_FOUNTAIN = 5;
-
+	
 	public Attributes() {
 		super();
 	}
@@ -71,5 +71,18 @@ public class Attributes {
 		else if (val.equals("proximityDistance"))
 			return PROXIMITY_DISTANCE;
 		else throw new RuntimeException("Sorting not allowed on this attribute");
+	}
+	
+	public int length() {
+		int length = 0;
+		if (hotelRating) length++;
+		if (tripAdvisorRating) length++;
+		if (highRate) length++;
+		if (proximityDistance) length++;
+		if (distFromColosseum) length++;
+		if (distFromTreviFountain) length++;
+		if (internet) length++;
+		if (pool) length++;
+		return length;
 	}
 }

@@ -45,12 +45,12 @@ public class Hotel implements Record {
 		this.distFromTreviFountain = distFromTreviFountain;
 		// custom conversion for this application: data might be placed in different directories
 		int numericId = Integer.parseInt(id);
+		System.out.println(picture);
 		String path = "";
-		String[] parts = picture.split("/");
 		if (numericId <= 297078)
-			path = parts[0]+"/low/"+parts[1];
-		else path = parts[0]+"/high/"+parts[1];
-		this.picture = path;
+			path = "hotel_images/low/";
+		else path = "hotel_images/high/";
+		this.picture = path + picture;
 	}
 	
 	public String toJSON(int order) {
