@@ -71,22 +71,27 @@ function showAlert(message, kind) {
                 .attr("class", "alert alert-block "+kind));
 }
 
-var gmap;
+function getRange( selector ) {
+    var values = $(selector).slider("values");
+    var options = $(selector).slider("option");
+    values[0] = values[0] == options.min ? undefined : values[0];
+    values[1] = values[1] == options.max ? undefined : values[1];
+    return values;
+}
 
 function getHotels() {
-    var colRange = $( "#colosseum-range" ).slider("values");
-    var treviRange = $( "#trevi-range" ).slider("values");
-    var proxRange = $( "#proximity-range" ).slider("values");
-    var rateRange = $( "#rate-range" ).slider("values");
-    var expedia =  $( "#expedia-range" ).slider("value");
-    var tripad =  $( "#tripad-range" ).slider("value");
-    var sorting = $( "#sortby" ).val();
 
     clearList();
     showAlert('<h4>Getting Data</h4>Kick back and put your feet up while we work.',
               'alert-info');
 
-
+    var colRange   = getRange( "#colosseum-range" );
+    var treviRange = getRange( "#trevi-range" );
+    var proxRange  = getRange( "#proximity-range" );
+    var rateRange  = getRange( "#rate-range" );
+    var expedia    = $( "#expedia-range" ).slider("value");
+    var tripad     = $( "#tripad-range" ).slider("value");
+    var sorting    = $( "#sortby" ).val();
     var query = {highRateStart: rateRange[0],
                  highRateEnd: rateRange[1],
                  proximityDistanceStart: proxRange[0],
@@ -98,13 +103,13 @@ function getHotels() {
                  pool: $("#pool").is(':checked'),
                  internet: $("#internet").is(':checked'),
                  hotelRatingStart: expedia == 0 ? -1 : expedia,
-                 tripAdvisorRatingStart: tripad == 0 ? -1 : tripad,
-                }
+                 tripAdvisorRatingStart: tripad == 0 ? -1 : tripad
+                };
 
     if (sorting != "default" ) {
         var parts = sorting.split("-");
         query['sortBy'] = parts[0];
-        if (parts.length > 1) query['sortType'] = parts[1];
+        query['sortType'] = parts[1];
 
         if (sorting == "skyline") {
             var satt = $.map($("input[name='skyline-opt']:checked"), function(e,i){
@@ -128,6 +133,10 @@ function getHotels() {
                       'alert-error');
         });
 }
+
+
+var gmap;
+
 
 $(function() {
     $('#tab_map_link').on('shown', function (e) {
