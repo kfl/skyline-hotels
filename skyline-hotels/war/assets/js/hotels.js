@@ -64,6 +64,12 @@ function clearList() {
     $("#hotel-list").empty();
 }
 
+function showAlert(message, kind) {
+    $("#hotel-list")
+        .append($('<div></div>')
+                .html(message)
+                .attr("class", "alert alert-block "+kind));
+}
 
 var gmap;
 
@@ -76,11 +82,9 @@ function getHotels() {
     var tripad =  $( "#tripad-range" ).slider("value");
     var sorting = $( "#sortby" ).val();
 
-    console.log(sorting);
     clearList();
-    $("#hotel-list")
-        .append($('<div><h4>Getting Data</h4>Kick back and put your feet up while we work.</div>')
-                .attr("class", "alert alert-block alert-info"));
+    showAlert('<h4>Getting Data</h4>Kick back and put your feet up while we work.',
+              'alert-info');
 
 
     var query = {highRateStart: rateRange[0],
@@ -112,10 +116,9 @@ function getHotels() {
                    })
         .fail(function ( jqxhr, textStatus, error ) {
             clearList();
-            var err = textStatus + ', ' + error;
-            $("#hotel-list")
-                .append($('<div><h4>Oh snap, something went wrong</h4>'+err+'</div>')
-                        .attr("class", "alert alert-block alert-error"));
+            var err = jqxhr.status + ' ' + textStatus + ': ' + error;
+            showAlert('<h4>Oh snap, something went wrong</h4>'+err,
+                      'alert-error');
         });
 }
 
