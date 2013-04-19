@@ -47,6 +47,12 @@ function listHotel(div){
         });
 }
 
+
+var debug_flag = false; 
+function debug_output(str) {
+    return debug_flag ? str : '';
+}
+
 function htmlHotel(hotel){
     var imgP = /low|high/.test(hotel.picture) ? 
         'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg";
@@ -56,7 +62,7 @@ function htmlHotel(hotel){
         '<p>'+hotel.address1+'<br />'+
         hotel.postalCode+' '+hotel.city+'<br />'+
         'Price per night: '+hotel.highRate.toFixed(2)+'€<br />'+
-        '(id: '+hotel.id+', order: '+hotel.order+')'+
+        debug_output('(id: '+hotel.id+', order: '+hotel.order+')')+
         '</p></div>';
 }
 
