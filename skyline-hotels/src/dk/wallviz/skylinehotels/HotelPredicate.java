@@ -1,50 +1,70 @@
 package dk.wallviz.skylinehotels;
 
 public class HotelPredicate {
-	int propertyCategoryStart = 0;
-	int propertyCategoryEnd = 5;
-	
-	double hotelRatingStart = Double.NEGATIVE_INFINITY;
-	double hotelRatingEnd = Double.POSITIVE_INFINITY;
-	
-	double tripAdvisorRatingStart = Double.NEGATIVE_INFINITY;
-	double tripAdvisorRatingEnd = Double.POSITIVE_INFINITY;
-	
-	double highRateStart = Double.NEGATIVE_INFINITY;
-	double highRateEnd = Double.POSITIVE_INFINITY;
-	
-	double proximityDistanceStart = Double.NEGATIVE_INFINITY;
-	double proximityDistanceEnd = Double.POSITIVE_INFINITY;
-	
-	boolean internet = false;
-	
-	boolean pool = false;
-	
-	double distFromColosseumStart = Double.NEGATIVE_INFINITY;
-	double distFromColosseumEnd = Double.POSITIVE_INFINITY;
-	
-	double distFromTreviFountainStart = Double.NEGATIVE_INFINITY;
-	double distFromTreviFountainEnd = Double.POSITIVE_INFINITY;
+	double[] min;
+	double[] max;
+	boolean[] flag; 
 		
+	public HotelPredicate() {
+		min = new double[Hotel.numDoubleAtts()];
+		max = new double[Hotel.numDoubleAtts()];
+		flag = new boolean[Hotel.numBooleanAtts()];
+		for (int i=0; i<min.length; i++) min[i] = Double.NEGATIVE_INFINITY;
+		for (int i=0; i<max.length; i++) max[i] = Double.POSITIVE_INFINITY;
+		for (int i=0; i<flag.length; i++) flag[i] = false;
+	}
+	
 	public boolean check(Hotel h) {
-		if (h.propertyCategory<propertyCategoryStart) return false;
-		if (h.propertyCategory>propertyCategoryEnd) return false;
-		if (h.hotelRating<hotelRatingStart) return false;
-		if (h.hotelRating>hotelRatingEnd) return false;
-		if (h.tripAdvisorRating<tripAdvisorRatingStart) return false;
-		if (h.tripAdvisorRating>tripAdvisorRatingEnd) return false;
-		if (h.highRate<highRateStart) return false;
-		if (h.highRate>highRateEnd) return false;
-		if (h.proximityDistance<proximityDistanceStart) return false;
-		if (h.proximityDistance>proximityDistanceEnd) return false;
-		if (h.distFromColosseum<distFromColosseumStart) return false;
-		if (h.distFromColosseum>distFromColosseumEnd) return false;
-		if (h.distFromTreviFountain<distFromTreviFountainStart) return false;
-		if (h.distFromTreviFountain>distFromTreviFountainEnd) return false;
-		//if (h.<Start) return false;
-		//if (h.>End) return false;
-		if (!h.internet && internet) return false;
-		if (!h.pool && pool) return false;
+		for (int i=Hotel.NUM_OFFSET; i<Hotel.numDoubleAtts()+Hotel.NUM_OFFSET; i++) {
+			if (h.getDouble(i)<getMin(i)) return false;
+			if (h.getDouble(i)>getMax(i)) return false;
+		}
+		for (int i=Hotel.BOOL_OFFSET; i<Hotel.numBooleanAtts()+Hotel.BOOL_OFFSET; i++)
+			if (!h.getBoolean(i) && getFlag(i)) return false;
 		return true;
+	}
+	
+	public void setMin(int field, double val) {
+		min[field-Hotel.NUM_OFFSET] = val;
+	}
+	
+	public void setMax(int field, double val) {
+		max[field-Hotel.NUM_OFFSET] = val;
+	}
+	
+	public void setFlag(int field, boolean val) {
+		flag[field-Hotel.BOOL_OFFSET] = val;
+	}
+	
+	public double getMin(int field) {
+		return min[field-Hotel.NUM_OFFSET];
+	}
+	
+	public double getMax(int field) {
+		return max[field-Hotel.NUM_OFFSET];
+	}
+	
+	public boolean getFlag(int field) {
+		return flag[field-Hotel.BOOL_OFFSET];
+	}
+	
+	
+	/**
+	 * Creates an HotelPredicate with the extreme values contained in the input data
+	 * @return
+	 */
+	public static HotelPredicate fit(Hotel[] hotels) {
+		HotelPredicate p = new HotelPredicate();
+		for (int i=Hotel.NUM_OFFSET; i<Hotel.numDoubleAtts()+Hotel.NUM_OFFSET; i++) {
+			p.setMin(i,hotels[0].getDouble(i));
+			p.setMax(i,hotels[0].getDouble(i));
+		}
+		for (Hotel h: hotels) {
+			for (int i=Hotel.NUM_OFFSET; i<Hotel.numDoubleAtts()+Hotel.NUM_OFFSET; i++) {
+				if (p.getMin(i)>h.getDouble(i)) p.setMin(i,h.getDouble(i));
+				if (p.getMax(i)<h.getDouble(i)) p.setMax(i,h.getDouble(i));
+			}
+		}
+		return p;
 	}
 }

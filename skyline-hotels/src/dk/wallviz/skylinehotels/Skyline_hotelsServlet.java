@@ -21,7 +21,7 @@ public class Skyline_hotelsServlet extends HttpServlet {
 		String skylineOf = req.getParameter("skylineOf");
 		String sortBy = req.getParameter("sortBy");
 		if (skylineOf != null) {
-			Attributes atts = Attributes.parse(skylineOf,",");
+			Collection<Integer> atts = Hotel.getAttributes(skylineOf,",");
 			Skyline sky = new Skyline(atts);
 			hotels = sky.execute(hotels);
 			
@@ -29,13 +29,14 @@ public class Skyline_hotelsServlet extends HttpServlet {
 			if (sortBy != null && sortBy.equals("skyline")) {
 					RepresentativeSkyline rep = new RepresentativeSkyline(hotels,atts);
 					hotels = rep.execute();
+					System.out.println(hotels.length);
 				}
 			//resp.getWriter().println(hotels.length+" hotels in the skyline<br/>");
 		}
 		
 		// sorting
 		if (sortBy != null && !sortBy.equals("skyline")) {
-			int attribute = Attributes.getAttribute(sortBy); 
+			int attribute = Hotel.getAttribute(sortBy); 
 			String sortType = req.getParameter("sortType");
 			boolean asc = true;
 			if (sortType != null && sortType.equals("desc"))
@@ -77,7 +78,6 @@ public class Skyline_hotelsServlet extends HttpServlet {
 					r[3], // address1
 					r[4], // city
 					r[5], // postalCode
-					Integer.parseInt(r[6]), // propertyCategory
 					d(r[7]), // hotelRating
 					d(r[9]), // tripAdvisorRating
 					d(r[10]), // highRate
@@ -99,38 +99,34 @@ public class Skyline_hotelsServlet extends HttpServlet {
 	HotelPredicate buildFilter(HttpServletRequest req) {
 		HotelPredicate pred = new HotelPredicate();
 		String val;
-		if ((val = req.getParameter("propertyCategoryStart"))!=null)
-			pred.propertyCategoryStart = Integer.parseInt(val);
-		if ((val = req.getParameter("propertyCategoryEnd"))!=null)
-			pred.propertyCategoryEnd = Integer.parseInt(val);
 		if ((val = req.getParameter("hotelRatingStart"))!=null)
-			pred.hotelRatingStart = Double.parseDouble(val);
+			pred.setMin(Hotel.HOTEL_RATING,Double.parseDouble(val));
 		if ((val = req.getParameter("hotelRatingEnd"))!=null)
-			pred.hotelRatingEnd = Double.parseDouble(val);
+			pred.setMax(Hotel.HOTEL_RATING,Double.parseDouble(val));
 		if ((val = req.getParameter("tripAdvisorRatingStart"))!=null)
-			pred.tripAdvisorRatingStart = Double.parseDouble(val);
+			pred.setMin(Hotel.TRIP_ADVISOR_RATING,Double.parseDouble(val));
 		if ((val = req.getParameter("tripAdvisorRatingEnd"))!=null)
-			pred.tripAdvisorRatingEnd = Double.parseDouble(val);
+			pred.setMax(Hotel.TRIP_ADVISOR_RATING,Double.parseDouble(val));
 		if ((val = req.getParameter("highRateStart"))!=null)
-			pred.highRateStart = Double.parseDouble(val);
+			pred.setMin(Hotel.HIGH_RATE,Double.parseDouble(val));
 		if ((val = req.getParameter("highRateEnd"))!=null)
-			pred.highRateEnd = Double.parseDouble(val);
+			pred.setMax(Hotel.HIGH_RATE,Double.parseDouble(val));
 		if ((val = req.getParameter("proximityDistanceStart"))!=null)
-			pred.proximityDistanceStart = Double.parseDouble(val);
+			pred.setMin(Hotel.PROXIMITY_DISTANCE,Double.parseDouble(val));
 		if ((val = req.getParameter("proximityDistanceEnd"))!=null)
-			pred.proximityDistanceEnd = Double.parseDouble(val);
+			pred.setMax(Hotel.PROXIMITY_DISTANCE,Double.parseDouble(val));
 		if ((val = req.getParameter("distFromColosseumStart"))!=null)
-			pred.distFromColosseumStart = Double.parseDouble(val);
+			pred.setMin(Hotel.DIST_FROM_COLOSSEUM,Double.parseDouble(val));
 		if ((val = req.getParameter("distFromColosseumEnd"))!=null)
-			pred.distFromColosseumEnd = Double.parseDouble(val);
+			pred.setMax(Hotel.DIST_FROM_COLOSSEUM,Double.parseDouble(val));
 		if ((val = req.getParameter("distFromTreviFountainStart"))!=null)
-			pred.distFromTreviFountainStart = Double.parseDouble(val);
+			pred.setMin(Hotel.DIST_FROM_TREVI_FOUNTAIN,Double.parseDouble(val));
 		if ((val = req.getParameter("distFromTreviFountainEnd"))!=null)
-			pred.distFromTreviFountainEnd = Double.parseDouble(val);
+			pred.setMax(Hotel.DIST_FROM_TREVI_FOUNTAIN,Double.parseDouble(val));
 		if ((val = req.getParameter("internet"))!=null)
-			pred.internet = Boolean.parseBoolean(val);
+			pred.setFlag(Hotel.INTERNET,Boolean.parseBoolean(val));
 		if ((val = req.getParameter("pool"))!=null)
-			pred.pool = Boolean.parseBoolean(val);
+			pred.setFlag(Hotel.POOL,Boolean.parseBoolean(val));
 		return pred;
 	}
 	

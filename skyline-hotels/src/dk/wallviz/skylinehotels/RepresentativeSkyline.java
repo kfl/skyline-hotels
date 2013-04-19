@@ -3,10 +3,11 @@ package dk.wallviz.skylinehotels;
 import java.util.*;
 
 public class RepresentativeSkyline {
-	private Attributes atts;
+	private Collection<Integer> atts;
 	private Hotel[] skylineHotels;
+	private HotelPredicate minmax;
 	
-	public RepresentativeSkyline(Hotel[] skylineHotels, Attributes atts) {
+	public RepresentativeSkyline(Hotel[] skylineHotels, Collection<Integer> atts) {
 		super();
 		this.atts = atts;
 		this.skylineHotels = skylineHotels;
@@ -15,6 +16,8 @@ public class RepresentativeSkyline {
 	Hotel[] execute() {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
 	
+		// find min/max values
+		minmax = HotelPredicate.fit(skylineHotels);
 		// select one and collect the others in a decent data structure
 		result.add(skylineHotels[0]);
 		Set<Hotel> unprocessed = new HashSet<Hotel>();
@@ -22,18 +25,20 @@ public class RepresentativeSkyline {
 			unprocessed.add(skylineHotels[i]);
 		
 		// Repeat k-1 times (in this case, for all hotels):
-		//for (int i=0; i<k-1; i++) {
-		while (unprocessed.size()>0) {
+		for (int i=0; i<4; i++) {
+		//while (unprocessed.size()>0) {
+			if (unprocessed.size()==0) break;
 			// Find record r maximizing representative distance
 			double currentMaxDistance = 0;
 			Hotel currentFurthestHotel = null;
 			for (Hotel h: unprocessed) {
 				double dist = representativeDistance(h,result);
-				if (dist>currentMaxDistance) { 
+				if (dist>=currentMaxDistance) { 
 					currentMaxDistance = dist;
 					currentFurthestHotel = h;
 				}
 			}
+			System.out.println(currentMaxDistance);
 			// Add h to the result and delete it from the unprocessed set
 			result.add(currentFurthestHotel);
 			unprocessed.remove(currentFurthestHotel);
@@ -54,7 +59,20 @@ public class RepresentativeSkyline {
 	}
 	
 	private double dist(Hotel h1, Hotel h2) {
-		int numIntermediatePoints = 0;
+		double dist = 0;
+		for (int att: atts) {
+			if (Hotel.isBoolean(att)) {
+				if (h1.getBoolean(att) ^ h2.getBoolean(att))
+					dist += 1;
+			}
+			else if (Hotel.isDouble(att)) {
+				if (minmax.getMax(att)!=minmax.getMin(att))
+					dist += Math.abs((h1.getDouble(att)-h2.getDouble(att))/(minmax.getMax(att)-minmax.getMin(att)));
+			}
+		}
+		return dist/atts.size();
+		
+		/*int numIntermediatePoints = 0;
 		for (Hotel h: skylineHotels) {
 			if (atts.hotelRating) {
 				if (((h1.hotelRating >= h.hotelRating) && (h.hotelRating >= h2.hotelRating)) ||
@@ -95,6 +113,6 @@ public class RepresentativeSkyline {
 					numIntermediatePoints++;
 			}
 		}
-		return (double)numIntermediatePoints/(skylineHotels.length-1)/atts.length();
+		return (double)numIntermediatePoints/(skylineHotels.length-1)/atts.length();*/
 	}
 }

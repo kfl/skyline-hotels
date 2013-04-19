@@ -4,13 +4,11 @@ import java.util.*;
 
 public class Skyline {
 	Set<Hotel> window;
-	private Attributes atts;
+	private Collection<Integer> atts;
 	private HotelMeasure measure;
 	
-	public Skyline(Attributes atts) {
-		super();
+	public Skyline(Collection<Integer> atts) {
 		this.atts = atts;
-		this.measure = new HotelMeasure(this.atts);
 		this.window = new HashSet<Hotel>();
 	}
 
@@ -20,7 +18,7 @@ public class Skyline {
 			boolean dominated = false;
 			for (Hotel wh: window) {
 				// check dominance
-				int dom = measure.dominates(h, wh);
+				int dom = measure.dominates(atts, h, wh);
 				if (dom < 0) {
 					// dominated - stop checking this hotel						
 					dominated = true;
