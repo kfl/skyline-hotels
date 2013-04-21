@@ -44,12 +44,18 @@
          margin-bottom: 2em;
       }
 
-
-      #ListMapTabContent {
-      height: 600px;
-      overflow: auto;
+      .move-rigth{
+         display: block;
+         float: right;
       }
 
+      #ListMapTabContent {
+         height: 600px;
+      }
+
+      #hotel-list {
+         overflow: auto;
+      }
       @media (max-width: 980px) {
         /* Enable use of floated navbar text */
         .navbar-text.pull-right {
@@ -170,7 +176,7 @@
             </ul>
             <div id="ListMapTabContent" class="tab-content">
               <div class="tab-pane fade active in" id="listing">
-                <div class="input-prepend pull-right">
+                <div class="input-prepend move-right">
                   <span class="add-on">Order by:</span>
                   <select id="sortby">
                     <option value="default">Default</option>

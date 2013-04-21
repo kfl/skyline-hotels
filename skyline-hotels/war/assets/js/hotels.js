@@ -14,6 +14,8 @@ function populateList(hs) {
                 .html(htmlHotel(item))
         );
     });
+
+    $(".btn", hlist).popover({title: "Not done yet", placement: 'left'});
     
     // var listings = d3.select("#hotel-list").selectAll("li")
     //     .data(hs, function(h) { return h.id; });
@@ -59,7 +61,9 @@ function htmlHotel(hotel){
 
     return '<img class="media-object pull-left img-polaroid" src="'+imgP+'">'+
         '<div class="media-body"><h4 class="media-heading">'+hotel.name+'</h4>'+
-        '<p>'+hotel.address1+'<br />'+
+        '<p>'+hotel.address1+
+        '<a data-original-title="'+hotel.name+'" href="#" class="btn pull-right" data-toggle="popover" data-content="Details not ready yet. Comming soon!" data-trigger="click"><i class="icon-info-sign"></i> Details</a>'+
+        '<br />'+
         hotel.postalCode+' '+hotel.city+'<br />'+
         'Price per night: '+hotel.highRate.toFixed(2)+'€<br />'+
         debug_output('(id: '+hotel.id+', order: '+hotel.order+')')+
