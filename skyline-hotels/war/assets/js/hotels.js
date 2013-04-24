@@ -15,7 +15,7 @@ function populateList(hs) {
         );
     });
 
-    $(".btn", hlist).popover({title: "Not done yet", placement: 'left'});
+    $(".btn", hlist).popover({placement: 'left'});
     
     // var listings = d3.select("#hotel-list").selectAll("li")
     //     .data(hs, function(h) { return h.id; });
@@ -134,7 +134,8 @@ function getHotels() {
                    function(hs) {
                        hotels = hs;
                        clearList();
-                       populateList(hs.slice(0,100));
+                       populateList(hs);
+                       populateMap(hs);
                    })
         .fail(function ( jqxhr, textStatus, error ) {
             clearList();
@@ -146,30 +147,66 @@ function getHotels() {
 
 
 var gmap;
+var markersArray = [];
+
+function addHotelMarker(name, lat, lon) {
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(lat, lon),
+        map: gmap,
+        title: name
+    });
+
+    var infowindow = new google.maps.InfoWindow({
+        content: '<h4>'+name+'</h4>'
+    });
+
+    google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(gmap,marker);
+    });
+
+    markersArray.push(marker);
+}
+
+// Removes the overlays from the map, but keeps them in the array
+function clearHotelOverlays() {
+  if (markersArray) {
+    for (var i in markersArray) {
+      markersArray[i].setMap(null);
+    }
+  }
+}
+
+// Shows any overlays currently in the array
+function showHotelOverlays() {
+  if (markersArray) {
+    for (var i in markersArray) {
+      markersArray[i].setMap(gmap);
+    }
+  }
+}
+
+// Deletes all markers in the array by removing references to them
+function deleteHotelOverlays() {
+  if (markersArray) {
+    for (var i in markersArray) {
+      markersArray[i].setMap(null);
+    }
+    markersArray.length = 0;
+  }
+}
+
+function populateMap(hs) {
+    console.log("Populating map");
+    deleteHotelOverlays()
+    $(hs).each(function(index, hotel) {
+        addHotelMarker(hotel.name, hotel.lat, hotel.lon);
+    });
+}
+
+
 
 
 $(function() {
-    $('#tab_map_link').on('shown', function (e) {
-        if(gmap == undefined) {
-            gmap = new google.maps.Map(d3.select("#map_canvas").node(), {
-                zoom: 12,
-                center: new google.maps.LatLng(41.9000, 12.5000),
-                zoomControlOptions: {
-                    style: google.maps.ZoomControlStyle.LARGE
-                },
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            });
-
-            $("#map_canvas").height($("#option-pane").outerHeight() - $("#listMapTaps").outerHeight(true));
-        }
-    });
-    
-    // $(window).resize(function () {
-    //     var h = $(window).height(),
-    //         offsetTop = 190; // Calculate the top offset
-    //     $('#map_canvas').css('height', (h - offsetTop));
-    // }).resize();
-
 
     $('#internet,#pool').change(getHotels);
     $("#sortby").change(getHotels);
@@ -245,6 +282,30 @@ $(function() {
             $("#expedia-lab").text(ui.value);
         }
     });
+    
+    $("#map_canvas").height($("#option-pane").outerHeight() - $("#listMapTaps").outerHeight(true));
+    if(gmap == undefined) {
+        gmap = new google.maps.Map(d3.select("#map_canvas").node(), {
+            zoom: 12,
+            center: new google.maps.LatLng(41.9000, 12.5000),
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.LARGE
+            },
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+    }
+
+    $('#tab_map_link').on('shown', function (e) {
+        google.maps.event.trigger(gmap, 'resize');
+    });
+
+    // $(window).resize(function () {
+    //     var h = $(window).height(),
+    //         offsetTop = 190; // Calculate the top offset
+    //     $('#map_canvas').css('height', (h - offsetTop));
+    // }).resize();
+
+
 
     // Get an initial list of hotels
     getHotels();
