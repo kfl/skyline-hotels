@@ -49,10 +49,6 @@
          float: right;
       }
 
-      #ListMapTabContent {
-         height: 600px;
-      }
-
       #hotel-list {
          overflow: auto;
       }
@@ -100,7 +96,7 @@
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span4">
-          <div class="well">
+          <div id="option-pane" class="well">
             <fieldset>
               <legend>Location</legend>
               <label>Distance From Colosseum: <span id="colosseum-lab"></span></label>
@@ -169,12 +165,12 @@
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span8">
-          <div >
-            <ul id="ListMapTap" class="nav nav-pills">
+          <div id="hotels-pane">
+            <ul id="listMapTaps" class="nav nav-pills">
               <li class="active"><a href="#listing" data-toggle="pill">Listing</a></li>
               <li class=""><a href="#map" id="tab_map_link" data-toggle="pill">Map</a></li>
             </ul>
-            <div id="ListMapTabContent" class="tab-content">
+            <div id="listMapTabContent" class="tab-content">
               <div class="tab-pane fade active in" id="listing">
                 <div class="input-prepend move-right">
                   <span class="add-on">Order by:</span>

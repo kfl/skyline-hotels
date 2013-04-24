@@ -159,14 +159,16 @@ $(function() {
                 },
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });
+
+            $("#map_canvas").height($("#option-pane").outerHeight() - $("#listMapTaps").outerHeight(true));
         }
     });
     
-    $(window).resize(function () {
-        var h = $(window).height(),
-            offsetTop = 190; // Calculate the top offset
-        $('#map_canvas').css('height', (h - offsetTop));
-    }).resize();
+    // $(window).resize(function () {
+    //     var h = $(window).height(),
+    //         offsetTop = 190; // Calculate the top offset
+    //     $('#map_canvas').css('height', (h - offsetTop));
+    // }).resize();
 
 
     $('#internet,#pool').change(getHotels);
