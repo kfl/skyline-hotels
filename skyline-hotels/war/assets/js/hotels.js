@@ -8,14 +8,15 @@ function populateList(hs) {
     var hlist = $("#hotel-list");
 
     $(hs.slice(0,50)).each(function(index, item) {
-        hlist.append(
-            $(document.createElement('li'))
-                .attr("class", "media")
-                .html(htmlHotel(item))
-        );
+        var hotelElm = $(document.createElement('li'))
+            .attr("class", "media")
+            .html(htmlHotel(item));
+        var details = hotelDetails(item);
+        $(".btn", hotelElm).popover({placement: 'left', html:true, content: details});
+        hlist.append(hotelElm);
     });
 
-    $(".btn", hlist).popover({placement: 'left'});
+    
     
     // var listings = d3.select("#hotel-list").selectAll("li")
     //     .data(hs, function(h) { return h.id; });
@@ -58,17 +59,36 @@ function debug_output(str) {
 function htmlHotel(hotel){
     var imgP = /low|high/.test(hotel.picture) ? 
         'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg";
-
     return '<img class="media-object pull-left img-polaroid" src="'+imgP+'">'+
         '<div class="media-body"><h4 class="media-heading">'+hotel.name+'</h4>'+
         '<p>'+hotel.address1+
-        '<a data-original-title="'+hotel.name+'" href="#" class="btn pull-right" data-toggle="popover" data-content="Details not ready yet. Comming soon!" data-trigger="click"><i class="icon-info-sign"></i> Details</a>'+
+        '<a data-original-title="'+hotel.name+'" href="#" class="btn pull-right" data-toggle="popover" '+
+        'data-trigger="click"><i class="icon-info-sign"></i> Details</a>'+
         '<br />'+
         hotel.postalCode+' '+hotel.city+'<br />'+
         'Price per night: '+hotel.highRate.toFixed(2)+'€<br />'+
         debug_output('(id: '+hotel.id+', order: '+hotel.order+')')+
         '</p></div>';
 }
+
+
+function hotelDetails (hotel) {
+    var imgP = /low|high/.test(hotel.picture) ? 
+        'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg";
+    return '<img class="details-img pull-left img-polaroid" src="'+imgP+'">'+
+        '<div class="media-body"><h4 class="media-heading">'+hotel.name+'</h4>'+
+        '<p>'+hotel.address1+', '+hotel.postalCode+' '+hotel.city+'<br />'+
+        'Price per night: '+hotel.highRate.toFixed(2)+'€<br />'+
+        'Pool: '+ (hotel.pool ? 'Yes' : 'No') + ', '+
+        'Internet: '+ (hotel.pool ? 'Yes' : 'No') + '<br />'+
+        'Distance From Colosseum: '+hotel.distFromColosseum.toFixed(2)+', '+
+        'Distance From Trevi Fountain: '+hotel.distFromTreviFountain.toFixed(2)+', '+
+        'Distance to City Center: '+hotel.proximityDistance.toFixed(2)+'<br />'+
+        'Expedia Rating: '+hotel.hotelRating.toFixed(1)+', '+
+        'Trip Advisor Rating: '+hotel.tripAdvisorRating.toFixed(1)+''+
+        '</p>';
+}
+
 
 function clearList() {
     $("#hotel-list").empty();
@@ -149,15 +169,15 @@ function getHotels() {
 var gmap;
 var markersArray = [];
 
-function addHotelMarker(name, lat, lon) {
+function addHotelMarker(hotel) {
     var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(lat, lon),
+        position: new google.maps.LatLng(hotel.lat, hotel.lon),
         map: gmap,
         title: name
     });
 
     var infowindow = new google.maps.InfoWindow({
-        content: '<h4>'+name+'</h4>'
+        content: hotelDetails(hotel)
     });
 
     google.maps.event.addListener(marker, 'click', function() {
@@ -199,11 +219,9 @@ function populateMap(hs) {
     console.log("Populating map");
     deleteHotelOverlays()
     $(hs).each(function(index, hotel) {
-        addHotelMarker(hotel.name, hotel.lat, hotel.lon);
+        addHotelMarker(hotel);
     });
 }
-
-
 
 
 $(function() {
