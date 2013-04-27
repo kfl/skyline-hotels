@@ -18,7 +18,7 @@ public class HotelMeasure {
 				if (notDominates && notDominated) return 0;
 				break;
 			case Hotel.HIGH_RATE:
-			case Hotel.PROXIMITY_DISTANCE:
+			case Hotel.DIST_FROM_VATICAN:
 			case Hotel.DIST_FROM_COLOSSEUM:
 			case Hotel.DIST_FROM_TREVI_FOUNTAIN:
 				if (h1.getDouble(att) > h2.getDouble(att)) notDominates = true;

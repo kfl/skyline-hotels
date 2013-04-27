@@ -84,12 +84,14 @@ public class Skyline_hotelsServlet extends HttpServlet {
 					d(r[11]), // lat
 					d(r[12]), // long
 					d(r[13]), // proximityDistance
+					r[14].equals("Y"), // business center
+					r[15].equals("Y"), // fitness center
 					r[17].equals("Y"), // internet
 					r[38].equals("Y"), // pool
 					d(r[42]), // distFromColosseum 
 					d(r[43]), // distFromTreviFountain
-					r[44] // picture
-					);
+					r[44], // picture
+					"4");
 			list.add(h);
 		}
 		in.close();
@@ -112,9 +114,9 @@ public class Skyline_hotelsServlet extends HttpServlet {
 		if ((val = req.getParameter("highRateEnd"))!=null)
 			pred.setMax(Hotel.HIGH_RATE,Double.parseDouble(val));
 		if ((val = req.getParameter("proximityDistanceStart"))!=null)
-			pred.setMin(Hotel.PROXIMITY_DISTANCE,Double.parseDouble(val));
+			pred.setMin(Hotel.DIST_FROM_VATICAN,Double.parseDouble(val));
 		if ((val = req.getParameter("proximityDistanceEnd"))!=null)
-			pred.setMax(Hotel.PROXIMITY_DISTANCE,Double.parseDouble(val));
+			pred.setMax(Hotel.DIST_FROM_VATICAN,Double.parseDouble(val));
 		if ((val = req.getParameter("distFromColosseumStart"))!=null)
 			pred.setMin(Hotel.DIST_FROM_COLOSSEUM,Double.parseDouble(val));
 		if ((val = req.getParameter("distFromColosseumEnd"))!=null)

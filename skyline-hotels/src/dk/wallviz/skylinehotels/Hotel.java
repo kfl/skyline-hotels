@@ -14,30 +14,35 @@ class Hotel implements Record {
 	static final int CITY = 3;
 	static final int POSTAL_CODE = 4;
 	static final int PICTURE = 5;
+	static final int SHORT_DESCRIPTION = 6;
+	static final int STARS = 7;
 	// Numerical attributes
 	static final int HOTEL_RATING = 0 + NUM_OFFSET;
 	static final int TRIP_ADVISOR_RATING = 1 + NUM_OFFSET;
 	static final int HIGH_RATE = 2 + NUM_OFFSET;
 	static final int LAT = 3 + NUM_OFFSET;
 	static final int LON = 4 + NUM_OFFSET;
-	static final int PROXIMITY_DISTANCE = 5 + NUM_OFFSET;
+	static final int DIST_FROM_VATICAN = 5 + NUM_OFFSET;
 	static final int DIST_FROM_COLOSSEUM = 6 + NUM_OFFSET;
 	static final int DIST_FROM_TREVI_FOUNTAIN = 7 + NUM_OFFSET;
 	// Boolean attributes
 	static final int POOL = 0 + BOOL_OFFSET;
 	static final int INTERNET = 1 + BOOL_OFFSET;
+	static final int BUSINESS_CENTER = 2 + BOOL_OFFSET;
+	static final int FITNESS_CENTER = 3 + BOOL_OFFSET;
 	
 	
-	private String[] stringAtts = new String[6];
+	private String[] stringAtts = new String[8];
 	private double[] doubleAtts = new double[8];
-	private boolean[] booleanAtts = new boolean[2];
+	private boolean[] booleanAtts = new boolean[4];
 	
 	public Hotel(String id, String name, String address1, String city,
 			String postalCode, double hotelRating,
 			double tripAdvisorRating, double highRate, double lat, double lon,
-			double proximityDistance, boolean internet, boolean pool,
+			double proximityDistance, boolean businessCenter, boolean fitnessCenter,
+			boolean internet, boolean pool,
 			double distFromColosseum, double distFromTreviFountain,
-			String picture) {
+			String picture, String stars) {
 		super();
 		setString(ID,id);
 		setString(NAME,name);
@@ -49,11 +54,14 @@ class Hotel implements Record {
 		setDouble(HIGH_RATE,highRate);
 		setDouble(LAT,lat);
 		setDouble(LON,lon);
-		setDouble(PROXIMITY_DISTANCE,proximityDistance);
+		setDouble(DIST_FROM_VATICAN,proximityDistance);
 		setBoolean(INTERNET,internet);
 		setBoolean(POOL,pool);
+		setBoolean(BUSINESS_CENTER,businessCenter);
+		setBoolean(FITNESS_CENTER,fitnessCenter);
 		setDouble(DIST_FROM_COLOSSEUM,distFromColosseum);
 		setDouble(DIST_FROM_TREVI_FOUNTAIN,distFromTreviFountain);
+		setString(STARS,stars);
 		// custom conversion for this application: data might be placed in different directories
 		int numericId = Integer.parseInt(id);
 		//System.out.println(picture);
@@ -62,6 +70,7 @@ class Hotel implements Record {
 			path = "hotel_images/low/";
 		else path = "hotel_images/high/";
 		setString(PICTURE,path + picture);
+		setString(SHORT_DESCRIPTION,"Tanto gentile e tanto onesta pare la donna mia quand'ella altrui saluta ch'ogne lingua devien tremando muta e li occhi no l'ardiscon di guardare");
 	}
 	
 	public String toJSON(int order) {
@@ -71,18 +80,22 @@ class Hotel implements Record {
 			  "\"address1\":\""+getString(ADDRESS1)+"\","+
 			  "\"city\":\""+getString(CITY)+"\","+
 			  "\"postalCode\":\""+getString(POSTAL_CODE)+"\","+
+			  "\"stars\":\""+getString(STARS)+"\","+
 			  "\"hotelRating\":"+getDouble(HOTEL_RATING)+","+
 			  //"\"confidenceRating\":"+confidenceRating+","+
 			  "\"tripAdvisorRating\":"+getDouble(TRIP_ADVISOR_RATING)+","+
-			  "\"highRate\":"+getDouble(HIGH_RATE)+","+
+			  "\"price\":"+getDouble(HIGH_RATE)+","+
 			  "\"lat\":"+getDouble(LAT)+","+
 			  "\"lon\":"+getDouble(LON)+","+
-			  "\"proximityDistance\":"+getDouble(PROXIMITY_DISTANCE)+","+
+			  "\"distFromVatican\":"+getDouble(DIST_FROM_VATICAN)+","+
 			  "\"internet\":"+getBoolean(INTERNET)+","+
 			  "\"pool\":"+getBoolean(POOL)+","+
+			  "\"businessCenter\":"+getBoolean(BUSINESS_CENTER)+","+
+			  "\"fitnessCenter\":"+getBoolean(FITNESS_CENTER)+","+
 			  "\"distFromColosseum\":"+getDouble(DIST_FROM_COLOSSEUM)+","+
 			  "\"distFromTreviFountain\":"+getDouble(DIST_FROM_TREVI_FOUNTAIN)+","+
-			  "\"picture\":\""+getString(PICTURE)+"\"}";
+			  "\"picture\":\""+getString(PICTURE)+"\","+
+			  "\"shortDescription\":\""+getString(SHORT_DESCRIPTION)+"\"}";
 	}
 	
 	public String getString(int field) {
@@ -129,7 +142,7 @@ class Hotel implements Record {
 		else if (val.equals("highRate"))
 			return HIGH_RATE;
 		else if (val.equals("proximityDistance"))
-			return PROXIMITY_DISTANCE;
+			return DIST_FROM_VATICAN;
 		else if (val.equals("distFromColosseum"))
 			return DIST_FROM_COLOSSEUM;
 		else if (val.equals("distFromTreviFountain"))
@@ -149,7 +162,7 @@ class Hotel implements Record {
 				else if (val.equals("highRate"))
 					res.add(HIGH_RATE);
 				else if (val.equals("proximityDistance"))
-					res.add(PROXIMITY_DISTANCE);
+					res.add(DIST_FROM_VATICAN);
 				else if (val.equals("distFromColosseum"))
 					res.add(DIST_FROM_COLOSSEUM);
 				else if (val.equals("distFromTreviFountain"))
@@ -158,6 +171,10 @@ class Hotel implements Record {
 					res.add(INTERNET);
 				else if (val.equals("pool"))
 					res.add(POOL);
+				else if (val.equals("businessCenter"))
+					res.add(BUSINESS_CENTER);
+				else if (val.equals("fitnessCenter"))
+					res.add(FITNESS_CENTER);
 				else throw new RuntimeException("Attribute " + val + " not recognized");
 		}
 		return res;
