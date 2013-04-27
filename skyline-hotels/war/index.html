@@ -36,6 +36,11 @@
          height: 64px;
       }
 
+      .details-img {
+         width: 256px;
+      }
+
+
       .ui-slider, .lastcheckbox {
          margin-bottom: 2em;
       }
@@ -44,12 +49,14 @@
          margin-bottom: 2em;
       }
 
-
-      #ListMapTabContent {
-      height: 600px;
-      overflow: auto;
+      .move-rigth{
+         display: block;
+         float: right;
       }
 
+      #hotel-list {
+         overflow: auto;
+      }
       @media (max-width: 980px) {
         /* Enable use of floated navbar text */
         .navbar-text.pull-right {
@@ -94,7 +101,7 @@
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span4">
-          <div class="well">
+          <div id="option-pane" class="well">
             <fieldset>
               <legend>Location</legend>
               <label>Distance From Colosseum: <span id="colosseum-lab"></span></label>
@@ -163,14 +170,14 @@
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span8">
-          <div >
-            <ul id="ListMapTap" class="nav nav-pills">
+          <div id="hotels-pane">
+            <ul id="listMapTaps" class="nav nav-pills">
               <li class="active"><a href="#listing" data-toggle="pill">Listing</a></li>
               <li class=""><a href="#map" id="tab_map_link" data-toggle="pill">Map</a></li>
             </ul>
-            <div id="ListMapTabContent" class="tab-content">
+            <div id="listMapTabContent" class="tab-content">
               <div class="tab-pane fade active in" id="listing">
-                <div class="input-prepend pull-right">
+                <div class="input-prepend move-right">
                   <span class="add-on">Order by:</span>
                   <select id="sortby">
                     <option value="default">Default</option>
@@ -201,7 +208,7 @@
     <!-- <script src="assets/js/jquery.js"></script> -->
     <script src="assets/js/jquery-ui-1.10.2.custom.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyBZGv2nZ3pok4Fhi-FCUhEaLajstwFKzLE&sensor=false"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="assets/js/hotels.js"></script>
   </body>
