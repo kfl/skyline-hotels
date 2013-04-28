@@ -73,25 +73,26 @@ public class Skyline_hotelsServlet extends HttpServlet {
 		ArrayList<Hotel> list = new ArrayList<Hotel>();
 		while ((hotel=in.readLine())!=null) {
 			String[] r = hotel.split("\t");
-			Hotel h = new Hotel(r[1], // id
-					r[2], // name
-					r[3], // address1
-					r[4], // city
-					r[5], // postalCode
-					d(r[7]), // hotelRating
-					d(r[9]), // tripAdvisorRating
-					d(r[10]), // highRate
-					d(r[11]), // lat
-					d(r[12]), // long
-					d(r[13]), // proximityDistance
-					r[14].equals("Y"), // business center
-					r[15].equals("Y"), // fitness center
-					r[17].equals("Y"), // internet
-					r[38].equals("Y"), // pool
-					d(r[42]), // distFromColosseum 
-					d(r[43]), // distFromTreviFountain
-					r[44], // picture
-					"4");
+			Hotel h = new Hotel(r[0], // id
+					r[1], // name
+					r[2], // address1
+					r[3], // city
+					r[4], // postalCode
+					d(r[5]), // hotelRating
+					d(r[6]), // tripAdvisorRating
+					d(r[7]), // lowRate
+					d(r[8]), // lat
+					d(r[9]), // long
+					r[10], // description
+					d(r[11]), // distFromTreviFountain
+					d(r[12]), // distFromColosseum 
+					d(r[13]), // distFromVatican
+					r[14].equals("Y"), // internet
+					r[15].equals("Y"), // business center
+					r[16].equals("Y"), // fitness center
+					r[17].equals("Y"), // pool
+					r[0]+".jpg", // picture
+					(int)d(r[5]));
 			list.add(h);
 		}
 		in.close();

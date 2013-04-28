@@ -39,10 +39,12 @@ class Hotel implements Record {
 	public Hotel(String id, String name, String address1, String city,
 			String postalCode, double hotelRating,
 			double tripAdvisorRating, double highRate, double lat, double lon,
-			double proximityDistance, boolean businessCenter, boolean fitnessCenter,
-			boolean internet, boolean pool,
-			double distFromColosseum, double distFromTreviFountain,
-			String picture, String stars) {
+			String description, 
+			double distFromTreviFountain, double distFromColosseum, double distFromVatican, 
+			boolean internet,
+			boolean businessCenter, boolean fitnessCenter,
+			boolean pool,
+			String picture, int stars) {
 		super();
 		setString(ID,id);
 		setString(NAME,name);
@@ -54,14 +56,14 @@ class Hotel implements Record {
 		setDouble(PRICE,highRate);
 		setDouble(LAT,lat);
 		setDouble(LON,lon);
-		setDouble(DIST_FROM_VATICAN,proximityDistance);
+		setDouble(DIST_FROM_VATICAN,distFromVatican);
 		setBoolean(INTERNET,internet);
 		setBoolean(POOL,pool);
 		setBoolean(BUSINESS_CENTER,businessCenter);
 		setBoolean(FITNESS_CENTER,fitnessCenter);
 		setDouble(DIST_FROM_COLOSSEUM,distFromColosseum);
 		setDouble(DIST_FROM_TREVI_FOUNTAIN,distFromTreviFountain);
-		setString(STARS,stars);
+		setDouble(STARS,stars);
 		// custom conversion for this application: data might be placed in different directories
 		int numericId = Integer.parseInt(id);
 		//System.out.println(picture);
@@ -70,7 +72,7 @@ class Hotel implements Record {
 			path = "hotel_images/low/";
 		else path = "hotel_images/high/";
 		setString(PICTURE,path + picture);
-		setString(SHORT_DESCRIPTION,"Tanto gentile e tanto onesta pare la donna mia quand'ella altrui saluta ch'ogne lingua devien tremando muta e li occhi no l'ardiscon di guardare");
+		setString(SHORT_DESCRIPTION,description);
 	}
 	
 	public String toJSON(int order) {
@@ -80,7 +82,7 @@ class Hotel implements Record {
 			  "\"address1\":\""+getString(ADDRESS1)+"\","+
 			  "\"city\":\""+getString(CITY)+"\","+
 			  "\"postalCode\":\""+getString(POSTAL_CODE)+"\","+
-			  "\"stars\":\""+getString(STARS)+"\","+
+			  "\"stars\":"+getDouble(STARS)+","+
 			  "\"hotelRating\":"+getDouble(HOTEL_RATING)+","+
 			  //"\"confidenceRating\":"+confidenceRating+","+
 			  "\"tripAdvisorRating\":"+getDouble(TRIP_ADVISOR_RATING)+","+
