@@ -13,11 +13,12 @@ public class HotelMeasure {
 			switch (att) {
 			case Hotel.HOTEL_RATING:
 			case Hotel.TRIP_ADVISOR_RATING:
+			case Hotel.STARS:
 				if (h1.getDouble(att) < h2.getDouble(att)) notDominates = true;
 				if (h1.getDouble(att) > h2.getDouble(att)) notDominated = true;
 				if (notDominates && notDominated) return 0;
 				break;
-			case Hotel.HIGH_RATE:
+			case Hotel.PRICE:
 			case Hotel.DIST_FROM_VATICAN:
 			case Hotel.DIST_FROM_COLOSSEUM:
 			case Hotel.DIST_FROM_TREVI_FOUNTAIN:
@@ -27,6 +28,8 @@ public class HotelMeasure {
 				break;
 			case Hotel.INTERNET:
 			case Hotel.POOL:
+			case Hotel.BUSINESS_CENTER:
+			case Hotel.FITNESS_CENTER:
 				if (!h1.getBoolean(att) && h2.getBoolean(att)) notDominates = true;
 				if (h1.getBoolean(att) && !h2.getBoolean(att)) notDominated = true;
 				if (notDominates && notDominated) return 0;

@@ -4,6 +4,7 @@ public class HotelPredicate {
 	double[] min;
 	double[] max;
 	boolean[] flag; 
+	boolean[] categ; 
 		
 	public HotelPredicate() {
 		min = new double[Hotel.numDoubleAtts()];

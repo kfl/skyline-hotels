@@ -109,13 +109,13 @@ public class Skyline_hotelsServlet extends HttpServlet {
 			pred.setMin(Hotel.TRIP_ADVISOR_RATING,Double.parseDouble(val));
 		if ((val = req.getParameter("tripAdvisorRatingEnd"))!=null)
 			pred.setMax(Hotel.TRIP_ADVISOR_RATING,Double.parseDouble(val));
-		if ((val = req.getParameter("highRateStart"))!=null)
-			pred.setMin(Hotel.HIGH_RATE,Double.parseDouble(val));
-		if ((val = req.getParameter("highRateEnd"))!=null)
-			pred.setMax(Hotel.HIGH_RATE,Double.parseDouble(val));
-		if ((val = req.getParameter("proximityDistanceStart"))!=null)
+		if ((val = req.getParameter("priceStart"))!=null)
+			pred.setMin(Hotel.PRICE,Double.parseDouble(val));
+		if ((val = req.getParameter("priceEnd"))!=null)
+			pred.setMax(Hotel.PRICE,Double.parseDouble(val));
+		if ((val = req.getParameter("distFromVaticanStart"))!=null)
 			pred.setMin(Hotel.DIST_FROM_VATICAN,Double.parseDouble(val));
-		if ((val = req.getParameter("proximityDistanceEnd"))!=null)
+		if ((val = req.getParameter("distFromVaticanEnd"))!=null)
 			pred.setMax(Hotel.DIST_FROM_VATICAN,Double.parseDouble(val));
 		if ((val = req.getParameter("distFromColosseumStart"))!=null)
 			pred.setMin(Hotel.DIST_FROM_COLOSSEUM,Double.parseDouble(val));
@@ -129,6 +129,10 @@ public class Skyline_hotelsServlet extends HttpServlet {
 			pred.setFlag(Hotel.INTERNET,Boolean.parseBoolean(val));
 		if ((val = req.getParameter("pool"))!=null)
 			pred.setFlag(Hotel.POOL,Boolean.parseBoolean(val));
+		if ((val = req.getParameter("businessCenter"))!=null)
+			pred.setFlag(Hotel.BUSINESS_CENTER,Boolean.parseBoolean(val));
+		if ((val = req.getParameter("fitnessCenter"))!=null)
+			pred.setFlag(Hotel.FITNESS_CENTER,Boolean.parseBoolean(val));
 		return pred;
 	}
 	

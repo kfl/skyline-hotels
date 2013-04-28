@@ -15,16 +15,16 @@ class Hotel implements Record {
 	static final int POSTAL_CODE = 4;
 	static final int PICTURE = 5;
 	static final int SHORT_DESCRIPTION = 6;
-	static final int STARS = 7;
 	// Numerical attributes
 	static final int HOTEL_RATING = 0 + NUM_OFFSET;
 	static final int TRIP_ADVISOR_RATING = 1 + NUM_OFFSET;
-	static final int HIGH_RATE = 2 + NUM_OFFSET;
+	static final int PRICE = 2 + NUM_OFFSET;
 	static final int LAT = 3 + NUM_OFFSET;
 	static final int LON = 4 + NUM_OFFSET;
 	static final int DIST_FROM_VATICAN = 5 + NUM_OFFSET;
 	static final int DIST_FROM_COLOSSEUM = 6 + NUM_OFFSET;
 	static final int DIST_FROM_TREVI_FOUNTAIN = 7 + NUM_OFFSET;
+	static final int STARS = 8 + NUM_OFFSET;
 	// Boolean attributes
 	static final int POOL = 0 + BOOL_OFFSET;
 	static final int INTERNET = 1 + BOOL_OFFSET;
@@ -32,8 +32,8 @@ class Hotel implements Record {
 	static final int FITNESS_CENTER = 3 + BOOL_OFFSET;
 	
 	
-	private String[] stringAtts = new String[8];
-	private double[] doubleAtts = new double[8];
+	private String[] stringAtts = new String[7];
+	private double[] doubleAtts = new double[9];
 	private boolean[] booleanAtts = new boolean[4];
 	
 	public Hotel(String id, String name, String address1, String city,
@@ -51,7 +51,7 @@ class Hotel implements Record {
 		setString(POSTAL_CODE,postalCode);
 		setDouble(HOTEL_RATING,hotelRating);
 		setDouble(TRIP_ADVISOR_RATING,tripAdvisorRating);
-		setDouble(HIGH_RATE,highRate);
+		setDouble(PRICE,highRate);
 		setDouble(LAT,lat);
 		setDouble(LON,lon);
 		setDouble(DIST_FROM_VATICAN,proximityDistance);
@@ -84,7 +84,7 @@ class Hotel implements Record {
 			  "\"hotelRating\":"+getDouble(HOTEL_RATING)+","+
 			  //"\"confidenceRating\":"+confidenceRating+","+
 			  "\"tripAdvisorRating\":"+getDouble(TRIP_ADVISOR_RATING)+","+
-			  "\"price\":"+getDouble(HIGH_RATE)+","+
+			  "\"price\":"+getDouble(PRICE)+","+
 			  "\"lat\":"+getDouble(LAT)+","+
 			  "\"lon\":"+getDouble(LON)+","+
 			  "\"distFromVatican\":"+getDouble(DIST_FROM_VATICAN)+","+
@@ -139,9 +139,9 @@ class Hotel implements Record {
 			return HOTEL_RATING;
 		else if (val.equals("tripAdvisorRating"))
 			return TRIP_ADVISOR_RATING;
-		else if (val.equals("highRate"))
-			return HIGH_RATE;
-		else if (val.equals("proximityDistance"))
+		else if (val.equals("price"))
+			return PRICE;
+		else if (val.equals("distFromVatican"))
 			return DIST_FROM_VATICAN;
 		else if (val.equals("distFromColosseum"))
 			return DIST_FROM_COLOSSEUM;
@@ -159,14 +159,16 @@ class Hotel implements Record {
 					res.add(HOTEL_RATING);
 				else if (val.equals("tripAdvisorRating"))
 					res.add(TRIP_ADVISOR_RATING);
-				else if (val.equals("highRate"))
-					res.add(HIGH_RATE);
-				else if (val.equals("proximityDistance"))
+				else if (val.equals("price"))
+					res.add(PRICE);
+				else if (val.equals("distFromVatican"))
 					res.add(DIST_FROM_VATICAN);
 				else if (val.equals("distFromColosseum"))
 					res.add(DIST_FROM_COLOSSEUM);
 				else if (val.equals("distFromTreviFountain"))
 					res.add(DIST_FROM_TREVI_FOUNTAIN);
+				else if (val.equals("stars"))
+					res.add(STARS);
 				else if (val.equals("internet"))
 					res.add(INTERNET);
 				else if (val.equals("pool"))
