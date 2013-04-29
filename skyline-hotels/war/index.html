@@ -45,6 +45,12 @@
          margin-bottom: 2em;
       }
 
+
+      .ui-slider-horizontal .ui-slider-handle { 
+         width: 15px; 
+         margin-left: -1px;
+      }
+
       #pool {
          margin-bottom: 2em;
       }
@@ -105,16 +111,16 @@
             <fieldset>
               <legend>Location</legend>
               <label>Distance From Colosseum: <span id="colosseum-lab"></span></label>
-              <div id="colosseum-range"></div>
+              <div id="colosseum-range" class="sliderwrapper"></div>
 
               <label>Distance From Trevi Fountain: <span id="trevi-lab"></span></label>
-              <div id="trevi-range"></div>
+              <div id="trevi-range" class="sliderwrapper"></div>
 
               <label>Distance to the Vatican: <span id="proximity-lab"></span></label>
-              <div id="proximity-range"></div>
+              <div id="proximity-range" class="sliderwrapper"></div>
 
               <label>Price per night: <span id="rate-lab"></span></label>
-              <div id="rate-range"></div>
+              <div id="rate-range" class="sliderwrapper"></div>
             </fieldset>
 
             <fieldset>
@@ -130,10 +136,10 @@
             <fieldset>
               <legend>Rating</legend>
               <label>Minimum Expedia Rating: <span id="expedia-lab"></span></label>
-              <div id="expedia-range"></div>
+              <div id="expedia-range" class="sliderwrapper"></div>
 
               <label>Minimum Trip Advisor Rating: <span id="tripad-lab"></span></label>
-              <div id="tripad-range"></div>
+              <div id="tripad-range" class="sliderwrapper"></div>
             </fieldset>
 
             <fieldset>
