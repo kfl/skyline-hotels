@@ -108,7 +108,7 @@ function hotelDetails (hotel) {
             'Internet: '+ (hotel.pool ? 'Yes' : 'No') + '<br />'+
             'Distance From Colosseum: '+hotel.distFromColosseum.toFixed(2)+', '+
             'Distance From Trevi Fountain: '+hotel.distFromTreviFountain.toFixed(2)+', '+
-            'Distance to City Center: '+hotel.distFromVatican.toFixed(2)+'<br />'+
+            'Distance from the Vatican: '+hotel.distFromVatican.toFixed(2)+'<br />'+
             'Expedia Rating: '+hotel.hotelRating.toFixed(1)+', '+
             'Trip Advisor Rating: '+hotel.tripAdvisorRating.toFixed(1)+''+
             '</p></div></div>'};
