@@ -102,6 +102,7 @@ function hotelDetails (hotel) {
             '<div class="row-fluid"><div class="span4">'+
             '<img class="details-img pull-left img-rounded" src="'+imgP+'">'+
             '</div><div class="span8">'+
+            '<p>'+hotel.shortDescription+'</p>'+
             '<p>'+hotel.address1+', '+hotel.postalCode+' '+hotel.city+'<br />'+
             'Price per night: '+hotel.price.toFixed(2)+'€<br />'+
             'Pool: '+ (hotel.pool ? 'Yes' : 'No') + ', '+
