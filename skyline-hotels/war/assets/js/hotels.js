@@ -88,7 +88,7 @@ function htmlHotel(hotel){
         '" role="button" class="btn pull-right" data-toggle="modal" >'+
         '<i class="icon-info-sign"></i> Details</a>'+
         '<br />'+
-        'Price per night: '+hotel.highRate.toFixed(2)+'€<br />'+
+        'Price per night: '+hotel.price.toFixed(2)+'€<br />'+
         debug_output('(id: '+hotel.id+', order: '+hotel.order+')')+
         '</p></div>'+modalDetails(hotel);
 }
@@ -103,12 +103,12 @@ function hotelDetails (hotel) {
             '<img class="details-img pull-left img-rounded" src="'+imgP+'">'+
             '</div><div class="span8">'+
             '<p>'+hotel.address1+', '+hotel.postalCode+' '+hotel.city+'<br />'+
-            'Price per night: '+hotel.highRate.toFixed(2)+'€<br />'+
+            'Price per night: '+hotel.price.toFixed(2)+'€<br />'+
             'Pool: '+ (hotel.pool ? 'Yes' : 'No') + ', '+
             'Internet: '+ (hotel.pool ? 'Yes' : 'No') + '<br />'+
             'Distance From Colosseum: '+hotel.distFromColosseum.toFixed(2)+', '+
             'Distance From Trevi Fountain: '+hotel.distFromTreviFountain.toFixed(2)+', '+
-            'Distance to City Center: '+hotel.proximityDistance.toFixed(2)+'<br />'+
+            'Distance to City Center: '+hotel.distFromVatican.toFixed(2)+'<br />'+
             'Expedia Rating: '+hotel.hotelRating.toFixed(1)+', '+
             'Trip Advisor Rating: '+hotel.tripAdvisorRating.toFixed(1)+''+
             '</p></div></div>'};
@@ -147,10 +147,10 @@ function getHotels() {
     var expedia    = $( "#expedia-range" ).slider("value");
     var tripad     = $( "#tripad-range" ).slider("value");
     var sorting    = $( "#sortby" ).val();
-    var query = {highRateStart: rateRange[0],
-                 highRateEnd: rateRange[1],
-                 proximityDistanceStart: proxRange[0],
-                 proximityDistanceEnd: proxRange[1],
+    var query = {priceStart: rateRange[0],
+                 priceEnd: rateRange[1],
+                 distFromVaticanStart: proxRange[0],
+                 distFromVaticanEnd: proxRange[1],
                  distFromColosseumStart: colRange[0],
                  distFromColosseumEnd: colRange[1],
                  distFromTreviFountainStart: treviRange[0],
