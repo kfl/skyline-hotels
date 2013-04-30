@@ -60,6 +60,11 @@
          float: right;
       }
 
+      .loading {
+         visibility: hidden;
+         /*display: none;*/
+      }
+
       #hotel-list {
          overflow: auto;
       }
@@ -195,7 +200,8 @@
                 <form class="navbar-form form-inline pull-right">
                   <p class="navbar-text"><label class="checkbox">
                     <input type="checkbox"></input>Only suggested hotels
-                  </label></p>
+                  </label>                  <img class="loading" src="assets/img/loading.gif"/></p>
+
                 </form>
               </div>
             </div>
