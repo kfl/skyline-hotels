@@ -11,8 +11,8 @@ function populateList(hs) {
         var hotelElm = $(document.createElement('li'))
             .attr("class", "media")
             .html(htmlHotel(item));
-        var details = hotelDetails(item);
-        $(".btn", hotelElm).popover({placement: 'left', html:true, content: details});
+//        var details = hotelDetails(item);
+//        $(".btn", hotelElm).popover({placement: 'left', html:true, content: details});
         hlist.append(hotelElm);
     });
 
@@ -56,37 +56,63 @@ function debug_output(str) {
     return debug_flag ? str : '';
 }
 
+function modalRef(hotel) {
+    return 'modal_'+hotel.id;
+}
+
+function modalDetails(hotel) {
+    var details = hotelDetails(hotel);
+    var modalR = modalRef(hotel);
+    return '<div id="'+modalR+'" class="modal hide fade" tabindex="-1" '+ 
+        'role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+        '<div class="modal-header">'+
+        '<button type="button" class="close" '+
+        'data-dismiss="modal" aria-hidden="true">×</button>'+
+        '<h3 id="myModalLabel">'+details.header+'</h3></div>'+
+        '<div class="modal-body">'+details.body+'</div>'+
+        '<div class="modal-footer">'+
+        '<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>'+
+        '</div></div>';
+}
+
+
 function htmlHotel(hotel){
     var imgP = /low|high/.test(hotel.picture) ? 
         'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg";
+    var modalR = modalRef(hotel);
+
     return '<img class="media-object pull-left img-polaroid" src="'+imgP+'">'+
         '<div class="media-body"><h4 class="media-heading">'+hotel.name+'</h4>'+
-        '<p>'+hotel.address1+
-        '<a data-original-title="'+hotel.name+'" href="#" class="btn pull-right" data-toggle="popover" '+
-        'data-trigger="click"><i class="icon-info-sign"></i> Details</a>'+
+        '<p>'+hotel.address1+', '+hotel.postalCode+' '+hotel.city+
+        '<a href="#'+modalR+
+        '" role="button" class="btn pull-right" data-toggle="modal" >'+
+        '<i class="icon-info-sign"></i> Details</a>'+
         '<br />'+
-        hotel.postalCode+' '+hotel.city+'<br />'+
-        'Price per night: '+hotel.highRate.toFixed(2)+'€<br />'+
+        'Price per night: '+hotel.price.toFixed(2)+'€<br />'+
         debug_output('(id: '+hotel.id+', order: '+hotel.order+')')+
-        '</p></div>';
+        '</p></div>'+modalDetails(hotel);
 }
 
 
 function hotelDetails (hotel) {
     var imgP = /low|high/.test(hotel.picture) ? 
         'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg";
-    return '<img class="details-img pull-left img-polaroid" src="'+imgP+'">'+
-        '<div class="media-body"><h4 class="media-heading">'+hotel.name+'</h4>'+
-        '<p>'+hotel.address1+', '+hotel.postalCode+' '+hotel.city+'<br />'+
-        'Price per night: '+hotel.highRate.toFixed(2)+'€<br />'+
-        'Pool: '+ (hotel.pool ? 'Yes' : 'No') + ', '+
-        'Internet: '+ (hotel.pool ? 'Yes' : 'No') + '<br />'+
-        'Distance From Colosseum: '+hotel.distFromColosseum.toFixed(2)+', '+
-        'Distance From Trevi Fountain: '+hotel.distFromTreviFountain.toFixed(2)+', '+
-        'Distance to City Center: '+hotel.proximityDistance.toFixed(2)+'<br />'+
-        'Expedia Rating: '+hotel.hotelRating.toFixed(1)+', '+
-        'Trip Advisor Rating: '+hotel.tripAdvisorRating.toFixed(1)+''+
-        '</p>';
+    return {header: hotel.name,
+            body:
+            '<div class="row-fluid"><div class="span4">'+
+            '<img class="details-img pull-left img-rounded" src="'+imgP+'">'+
+            '</div><div class="span8">'+
+            '<p>'+hotel.shortDescription+'</p>'+
+            '<p>'+hotel.address1+', '+hotel.postalCode+' '+hotel.city+'<br />'+
+            'Price per night: '+hotel.price.toFixed(2)+'€<br />'+
+            'Pool: '+ (hotel.pool ? 'Yes' : 'No') + ', '+
+            'Internet: '+ (hotel.pool ? 'Yes' : 'No') + '<br />'+
+            'Distance From Colosseum: '+hotel.distFromColosseum.toFixed(2)+', '+
+            'Distance From Trevi Fountain: '+hotel.distFromTreviFountain.toFixed(2)+', '+
+            'Distance from the Vatican: '+hotel.distFromVatican.toFixed(2)+'<br />'+
+            'Expedia Rating: '+hotel.hotelRating.toFixed(1)+', '+
+            'Trip Advisor Rating: '+hotel.tripAdvisorRating.toFixed(1)+''+
+            '</p></div></div>'};
 }
 
 
@@ -122,10 +148,10 @@ function getHotels() {
     var expedia    = $( "#expedia-range" ).slider("value");
     var tripad     = $( "#tripad-range" ).slider("value");
     var sorting    = $( "#sortby" ).val();
-    var query = {highRateStart: rateRange[0],
-                 highRateEnd: rateRange[1],
-                 proximityDistanceStart: proxRange[0],
-                 proximityDistanceEnd: proxRange[1],
+    var query = {priceStart: rateRange[0],
+                 priceEnd: rateRange[1],
+                 distFromVaticanStart: proxRange[0],
+                 distFromVaticanEnd: proxRange[1],
                  distFromColosseumStart: colRange[0],
                  distFromColosseumEnd: colRange[1],
                  distFromTreviFountainStart: treviRange[0],
@@ -176,8 +202,10 @@ function addHotelMarker(hotel) {
         title: name
     });
 
+    var details = hotelDetails(hotel);
+    
     var infowindow = new google.maps.InfoWindow({
-        content: hotelDetails(hotel)
+        content: '<h4>'+details.header+'</h4>'+details.body
     });
 
     google.maps.event.addListener(marker, 'click', function() {
