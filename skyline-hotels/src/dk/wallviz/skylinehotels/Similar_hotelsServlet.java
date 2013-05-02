@@ -15,6 +15,7 @@ public class Similar_hotelsServlet extends HttpServlet {
 		// get parameters
 		String relAtts = req.getParameter("attributes");
 		String id = req.getParameter("hotelId");
+		//System.out.println(id);
 		Collection<Integer> atts;
 		if (relAtts != null) {
 			atts = Hotel.getAttributes(relAtts,",");

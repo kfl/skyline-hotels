@@ -21,16 +21,18 @@ public class NearestNeighbor {
 		// find min/max values
 		minmax = HotelPredicate.fit(hotels);
 		// select one and collect the others in a decent data structure
-		double bestDistance = 0;
+		
+		SortedSet<HotelDistance> set = new TreeSet<HotelDistance>();
 		for (Hotel h: hotels) {
 			if (h.equals(target)) continue;
-			if (result.size()<5) {
-				result.add(target);
-				continue;
-			}
-			//System.out.println(currentMaxDistance);
-			// Add h to the result and delete it from the unprocessed set
+			set.add(new HotelDistance(dist(h,target),h));
 		}
+		int r=0;
+		for (HotelDistance hd: set) {
+			result.add(hd.h);
+			r++;
+			if (r==5) break;
+		} 
 		return result.toArray(new Hotel[0]);
 	}
 	
@@ -103,4 +105,24 @@ public class NearestNeighbor {
 		}
 		return (double)numIntermediatePoints/(skylineHotels.length-1)/atts.length();*/
 	}
+}
+
+class HotelDistance implements Comparable<HotelDistance> {
+	public double dist;
+	public Hotel h;
+	public HotelDistance(double dist, Hotel h) {
+		super();
+		this.dist = dist;
+		this.h = h;
+	}
+	
+	@Override
+	public int compareTo(HotelDistance o) {
+		// TODO Auto-generated method stub
+		if (dist>o.dist) return 1;
+		if (dist<o.dist) return -1;
+		return 0;
+	}
+	
+	
 }
