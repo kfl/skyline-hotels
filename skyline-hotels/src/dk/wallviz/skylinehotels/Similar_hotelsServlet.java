@@ -5,50 +5,37 @@ import javax.servlet.http.*;
 import java.util.*;
 
 @SuppressWarnings("serial")
-public class Skyline_hotelsServlet extends HttpServlet {
+public class Similar_hotelsServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		//System.out.println(req.getParameter("skylineOf"));
-		//System.out.println(req.getParameter("distFromColosseumEnd"));
-		
 		// retrieving hotel data
 		Hotel[] hotels = getData();
 		//resp.getWriter().println(hotels.length+" hotels read<br/>");
 		
-		// filtering - not efficient, but simple code
-		HotelPredicate predicate = buildFilter(req);
-		hotels = filter(hotels,predicate);
-		//resp.getWriter().println(hotels.length+" hotels filtered<br/>");
-		
-		// skyline and sorting
-		String skylineOf = req.getParameter("skylineOf");
-		String sortBy = req.getParameter("sortBy");
-		if (skylineOf != null) {
-			Collection<Integer> atts = Hotel.getAttributes(skylineOf,",");
-			Skyline sky = new Skyline(atts);
-			hotels = sky.execute(hotels);
-			
-			// sort by representative skyline?
-			if (sortBy != null && sortBy.equals("skyline")) {
-					RepresentativeSkyline rep = new RepresentativeSkyline(hotels,atts);
-					hotels = rep.execute();
-					//System.out.println(hotels.length);
-			}
-			//resp.getWriter().println(hotels.length+" hotels in the skyline<br/>");
+		// get parameters
+		String relAtts = req.getParameter("attributes");
+		String id = req.getParameter("hotelId");
+		//System.out.println(id);
+		Collection<Integer> atts;
+		if (relAtts != null) {
+			atts = Hotel.getAttributes(relAtts,",");
+		}
+		else {
+			atts = new HashSet<Integer>();
+			atts.add(Hotel.PRICE);
 		}
 		
 		// sorting
-		if (sortBy != null && !sortBy.equals("skyline")) {
-			int attribute = Hotel.getAttribute(sortBy); 
-			String sortType = req.getParameter("sortType");
-			boolean asc = true;
-			if (sortType != null && sortType.equals("desc"))
-				asc = false;
-			Arrays.sort(hotels,new HotelComparator(attribute,asc));
+		Hotel h = getById(hotels,id);
+		//System.out.println(h);
+		Hotel[] nearHotels = new Hotel[0];
+		if (h!=null) {
+			NearestNeighbor near = new NearestNeighbor(hotels,h,atts);
+			nearHotels = near.execute();
 		}
 		
 		resp.setContentType("application/json");
-		resp.getWriter().println(toJSON(hotels));
+		resp.getWriter().println(toJSON(nearHotels));
 	}
 	
 	private Hotel[] getData() throws IOException {
@@ -140,12 +127,13 @@ public class Skyline_hotelsServlet extends HttpServlet {
 		return pred;
 	}
 	
-	private Hotel[] filter(Hotel[] hotels, HotelPredicate pred) {
-		ArrayList<Hotel> list = new ArrayList<Hotel>();
-		for (Hotel h: hotels)
-			if (pred.check(h))
-				list.add(h);
-		return list.toArray(new Hotel[0]);
+	private Hotel getById(Hotel[] hotels, String id) {
+		for (Hotel h: hotels) {
+			//System.out.println(h.getString(Hotel.ID));
+			if (h.getString(Hotel.ID).equals(id))
+				return h;
+		}
+		return null;
 	}
 	
 	private String toJSON(Hotel[] hotels) {
