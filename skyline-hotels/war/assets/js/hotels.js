@@ -127,12 +127,17 @@ function showAlert(message, kind) {
                 .attr("class", "alert alert-block "+kind));
 }
 
-function getRange( selector ) {
+function getRange( selector, factor ) {
+    factor = factor || 1;
     var values = $(selector).slider("values");
     var options = $(selector).slider("option");
-    values[0] = values[0] == options.min ? undefined : values[0];
-    values[1] = values[1] == options.max ? undefined : values[1];
+    values[0] = values[0] == options.min ? undefined : values[0] * factor;
+    values[1] = values[1] == options.max ? undefined : values[1] * factor;
     return values;
+}
+
+function scaleToMeters( vals ) {
+    return $.map(vals, function(e) { return e ? e * 1000 : undefined; });
 }
 
 function getHotels() {
@@ -141,9 +146,9 @@ function getHotels() {
     showAlert('<h4>Getting Data</h4>Kick back and put your feet up while we work.',
               'alert-info');
 
-    var colRange   = getRange( "#colosseum-range" );
-    var treviRange = getRange( "#trevi-range" );
-    var proxRange  = getRange( "#proximity-range" );
+    var colRange   = getRange( "#colosseum-range", 1000 );
+    var treviRange = getRange( "#trevi-range", 1000 );
+    var proxRange  = getRange( "#proximity-range", 1000 );
     var rateRange  = getRange( "#rate-range" );
     var expedia    = $( "#expedia-range" ).slider("value");
     var tripad     = $( "#tripad-range" ).slider("value");
@@ -299,8 +304,8 @@ $(function() {
         range: true,
         min: 0,
         step: 10,
-        max: 5250,
-        values: [ 0, 5250 ],
+        max: 1300,
+        values: [ 0, 1300 ],
         change: getHotels,
         slide: function( event, ui ) {
             $("#rate-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " €");
