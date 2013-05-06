@@ -130,6 +130,26 @@ function showFailure ( jqxhr, textStatus, error ) {
               'alert-error');
 }
 
+function getSkylineAtts(query) {
+    var inputOpt = $('input[name=inputOpt]:checked', '#uiOpts').val();
+    console.log(inputOpt);
+
+    if( inputOpt == "implicit" ) {
+        var res = [];
+        var atts = $.map($("input[name='skyline-opt']"), function(a){
+            var e = a.value;
+            console.log(e);
+            return (query[e+'Start'] || query[e+'End']) ? e : undefined;
+        });
+        return atts.filter(function(){return true});
+    } else {
+        return $.map($("input[name='skyline-opt']:checked"), 
+                     function(e,i){ return e.value; });
+    }
+
+}
+
+
 function getHotels() {
     clearList();
     showAlert('<h4>Getting Data</h4>Kick back and put your feet up while we work.',
@@ -160,21 +180,14 @@ function getHotels() {
         var parts = sorting.split("-");
         query['sortBy'] = parts[0];
         query['sortType'] = parts[1];
-
-        if (sorting == "skyline") {
-            var satt = $.map($("input[name='skyline-opt']:checked"), function(e,i){
-                return e.value;
-            });
-            if (satt.length > 0) query['skylineOf'] = satt.join(',');
-        }
     } 
 
     jQuery.getJSON("/skyline_hotels",
                    query,
                    function(hs) {
                        hotels = hs;
-                       var satt = $.map($("input[name='skyline-opt']:checked"), 
-                                        function(e,i){ return e.value; });
+                       var satt = getSkylineAtts(query);
+                       console.log(satt);
                        if (satt.length > 0) {
                            query['skylineOf'] = satt.join(',');
                            query['sortBy'] = "skyline";
@@ -273,7 +286,6 @@ function setupRangeCheckbox( selector ) {
     $("#"+selector+"-lab").siblings("input[name='skyline-opt']").change(function() {
         if ($(this).is(':checked')) {
             $( "#"+selector+"-range" ).slider( "enable" );
-            getHotels();
         } else {
             $( "#"+selector+"-range" ).slider( "disable" );
             $("#"+selector+"-lab").text('');
@@ -283,9 +295,10 @@ function setupRangeCheckbox( selector ) {
                                                    [options.min, options.max] );
             } else {
                 $( "#"+selector+"-range" ).slider( "option", "value",
-                                                   [options.max] );
+                                                   [options.min] );
             }
         }
+        getHotels();
     });
 }
 
@@ -304,13 +317,19 @@ $(function() {
     $('input[name=inputOpt]', '#uiOpts').change(function() {
         var inputOpt = $('input[name=inputOpt]:checked', '#uiOpts').val();
         if( inputOpt == "implicit" ) {
-            $("input[name='skyline-opt']").hide()
+            var checkboxes = $("input[name='skyline-opt']");
+            checkboxes.hide()
                 .parent()
                 .toggleClass("checkbox");
+            $('.sliderwrapper').slider( "enable" );
+
         } else {
             $("input[name='skyline-opt']").show()
+                .prop('checked', false)
+                .trigger('change')
                 .parent()
                 .toggleClass("checkbox");
+            $('.sliderwrapper').slider( "disable" );
         }
     });
 
