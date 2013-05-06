@@ -52,7 +52,7 @@
 
 
       .ui-slider-horizontal .ui-slider-handle { 
-         width: 15px; 
+         width: 17px; 
          margin-left: -1px;
       }
 
@@ -119,18 +119,29 @@
         <div class="span4">
           <div id="option-pane" class="well">
             <fieldset>
-              <legend>Location</legend>
-              <label>Distance From Colosseum: <span id="colosseum-lab"></span></label>
+              <legend>Price and Location</legend>
+              <label class="checkbox"><input type="checkbox"
+                                             name="skyline-opt"
+                                             value="price">Price per
+                night: <span id="rate-lab"></span></label>
+              <div id="rate-range" class="sliderwrapper"></div>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt"
+                  value="distFromColosseum">Distance From
+                  Colosseum: <span id="colosseum-lab"></span></label>
               <div id="colosseum-range" class="sliderwrapper"></div>
 
-              <label>Distance From Trevi Fountain: <span id="trevi-lab"></span></label>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt"
+                  value="distFromTreviFountain">Distance From Trevi
+                  Fountain: <span id="trevi-lab"></span></label>
               <div id="trevi-range" class="sliderwrapper"></div>
 
-              <label>Distance to the Vatican: <span id="proximity-lab"></span></label>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt" value="distFromVatican">Distance
+                  to the
+                  Vatican: <span id="proximity-lab"></span></label>
               <div id="proximity-range" class="sliderwrapper"></div>
-
-              <label>Price per night: <span id="rate-lab"></span></label>
-              <div id="rate-range" class="sliderwrapper"></div>
             </fieldset>
 
             <fieldset>
@@ -145,10 +156,16 @@
               
             <fieldset>
               <legend>Rating</legend>
-              <label>Minimum Expedia Rating: <span id="expedia-lab"></span></label>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt" value="hotelRating">Minimum
+                  Expedia
+                  Rating: <span id="expedia-lab"></span></label>
               <div id="expedia-range" class="sliderwrapper"></div>
 
-              <label>Minimum Trip Advisor Rating: <span id="tripad-lab"></span></label>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt" value="tripAdvisorRating">Minimum
+                  Trip Advisor
+                  Rating: <span id="tripad-lab"></span></label>
               <div id="tripad-range" class="sliderwrapper"></div>
             </fieldset>
 
@@ -211,12 +228,12 @@
                       <li><a tabindex="-1"
                           href="#"><label class="radio">
                           <input type="radio" name="inputOpt"
-                          id="inputOptImp" value="implicit" checked
+                          id="inputOptImp" value="implicit" 
                           />Implicit</label></a></li>
                       <li><a tabindex="-1"
                           href="#"><label class="radio">
                           <input type="radio" name="inputOpt"
-                          id="inputOptExp" value="explicit"
+                          id="inputOptExp" value="explicit" checked
                           />Explicit</label></a></li>
                     </ul>
                   </li>

@@ -1,6 +1,10 @@
 "use strict";
 
 var hotels;
+var skyline;
+function inSkyline(hotel) {
+    return $.grep(skyline, function(e){ return e.id == hotel.id; }).length > 0;
+}
 
 
 function populateList(hs) {
@@ -80,9 +84,10 @@ function htmlHotel(hotel){
     var imgP = /low|high/.test(hotel.picture) ? 
         'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg";
     var modalR = modalRef(hotel);
+    var klass = inSkyline(hotel) ? "media-body alert" : "media-body";
 
     return '<img class="media-object pull-left img-polaroid" src="'+imgP+'">'+
-        '<div class="media-body"><h4 class="media-heading">'+hotel.name+'</h4>'+
+        '<div class="'+klass+'"><h4 class="media-heading">'+hotel.name+'</h4>'+
         '<p>'+hotel.address1+', '+hotel.postalCode+' '+hotel.city+
         '<a href="#'+modalR+
         '" role="button" class="btn pull-right" data-toggle="modal" >'+
@@ -140,8 +145,14 @@ function scaleToMeters( vals ) {
     return $.map(vals, function(e) { return e ? e * 1000 : undefined; });
 }
 
-function getHotels() {
+function showFailure ( jqxhr, textStatus, error ) {
+    clearList();
+    var err = jqxhr.status + ' ' + textStatus + ': ' + error;
+    showAlert('<h4>Oh snap, something went wrong</h4>'+err,
+              'alert-error');
+}
 
+function getHotels() {
     clearList();
     showAlert('<h4>Getting Data</h4>Kick back and put your feet up while we work.',
               'alert-info');
@@ -163,8 +174,8 @@ function getHotels() {
                  distFromTreviFountainEnd: treviRange[1],
                  pool: $("#pool").is(':checked'),
                  internet: $("#internet").is(':checked'),
-                 hotelRatingStart: expedia == 0 ? -1 : expedia,
-                 tripAdvisorRatingStart: tripad == 0 ? -1 : tripad
+                 hotelRatingStart: expedia == 0 ? undefined : expedia,
+                 tripAdvisorRatingStart: tripad == 0 ? undefined : tripad
                 };
 
     if (sorting != "default" ) {
@@ -184,16 +195,28 @@ function getHotels() {
                    query,
                    function(hs) {
                        hotels = hs;
-                       clearList();
-                       populateList(hs);
-                       populateMap(hs);
+                       var satt = $.map($("input[name='skyline-opt']:checked"), 
+                                        function(e,i){ return e.value; });
+                       if (satt.length > 0) {
+                           query['skylineOf'] = satt.join(',');
+                           query['sortBy'] = "skyline";
+                           jQuery.getJSON("/skyline_hotels",
+                                          query,
+                                          function(sky) {
+                                              skyline = sky;
+                                              clearList();
+                                              populateList(hs);
+                                              populateMap(hs);
+                                          })
+                               .fail(showFailure);
+                       } else {
+                           skyline = [];
+                           clearList();
+                           populateList(hs);
+                           populateMap(hs);
+                       }
                    })
-        .fail(function ( jqxhr, textStatus, error ) {
-            clearList();
-            var err = jqxhr.status + ' ' + textStatus + ': ' + error;
-            showAlert('<h4>Oh snap, something went wrong</h4>'+err,
-                      'alert-error');
-        });
+        .fail(showFailure);
 }
 
 
@@ -204,6 +227,7 @@ function addHotelMarker(hotel) {
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(hotel.lat, hotel.lon),
         map: gmap,
+        icon: inSkyline(hotel) ? "https://chart.googleapis.com/chart?chst=d_map_xpin_icon_withshadow&chld=pin_star|home|FFFF42|FF0000" : undefined,
         title: name
     });
 
@@ -218,6 +242,7 @@ function addHotelMarker(hotel) {
     });
 
     markersArray.push(marker);
+
 }
 
 // Removes the overlays from the map, but keeps them in the array
@@ -256,6 +281,26 @@ function populateMap(hs) {
     });
 }
 
+function setupRangeCheckbox( selector ) {
+    $("#"+selector+"-lab").siblings("input[name='skyline-opt']").change(function() {
+        if ($(this).is(':checked')) {
+            $( "#"+selector+"-range" ).slider( "enable" );
+            getHotels();
+        } else {
+            $( "#"+selector+"-range" ).slider( "disable" );
+            $("#"+selector+"-lab").text('');
+            var options = $( "#"+selector+"-range" ).slider("option");
+            if ( typeof(options.range) == "boolean" ) {
+                $( "#"+selector+"-range" ).slider( "option", "values", 
+                                                   [options.min, options.max] );
+            } else {
+                $( "#"+selector+"-range" ).slider( "option", "value",
+                                                   [options.max] );
+            }
+        }
+    });
+}
+
 
 $(function() {
 
@@ -272,67 +317,82 @@ $(function() {
         step: 1,
         min: 0,
         max: 40,
+        disabled: true,
         values: [ 0, 40 ],
         change: getHotels,
         slide: function( event, ui ) {
             $("#colosseum-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " km");
         }
     });
+    setupRangeCheckbox( "colosseum" );
+
     $( "#trevi-range" ).slider({
         range: true,
         step: 1,
         min: 0,
         max: 40,
+        disabled: true,
         values: [ 0, 40 ],
         change: getHotels,
         slide: function( event, ui ) {
             $("#trevi-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " km");
         }
     });
+    setupRangeCheckbox( "trevi" );
+
     $( "#proximity-range" ).slider({
         range: true,
         step: 1,
         min: 0,
         max: 25,
+        disabled: true,
         values: [ 0, 25 ],
         change: getHotels,
         slide: function( event, ui ) {
             $("#proximity-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " km");
         }
     });
+    setupRangeCheckbox( "proximity" );
+
     $( "#rate-range" ).slider({
         range: true,
         min: 0,
         step: 10,
         max: 1300,
+        disabled: true,
         values: [ 0, 1300 ],
         change: getHotels,
         slide: function( event, ui ) {
             $("#rate-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " €");
         }
     });
+    setupRangeCheckbox( "rate" );
 
     $( "#tripad-range" ).slider({
         range: "max",
         min: 0,
         max: 5,
         step: 0.5,
+        disabled: true,
         change: getHotels,
         slide: function( event, ui ) {
             $("#tripad-lab").text(ui.value);
         }
     });
+    setupRangeCheckbox( "tripad" );
 
     $( "#expedia-range" ).slider({
         range: "max",
         min: 0,
         max: 5,
         step: 0.5,
+        disabled: true,
         change: getHotels,
         slide: function( event, ui ) {
             $("#expedia-lab").text(ui.value);
         }
     });
+    setupRangeCheckbox( "expedia" );
     
     $("#map_canvas").height($("#option-pane").outerHeight() - $("#listMapTaps").outerHeight(true));
     if(gmap == undefined) {
@@ -355,8 +415,6 @@ $(function() {
     //         offsetTop = 190; // Calculate the top offset
     //     $('#map_canvas').css('height', (h - offsetTop));
     // }).resize();
-
-
 
     // Get an initial list of hotels
     getHotels();
