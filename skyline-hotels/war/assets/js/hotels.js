@@ -295,16 +295,25 @@ $(function() {
     $('#internet,#pool').change(getHotels);
     $("#sortby").change(getHotels);
 
-    $("input[name='skyline-opt']").change(function () {
-        if($( "#sortby" ).val() == 'skyline')
-            getHotels();
-    });
-
     $('input[name=resultOpt]', '#uiOpts').change(function() {
         clearList();
         populateList(hotels, skyline);
         populateMap(hotels, skyline);
     });
+
+    $('input[name=inputOpt]', '#uiOpts').change(function() {
+        var inputOpt = $('input[name=inputOpt]:checked', '#uiOpts').val();
+        if( inputOpt == "implicit" ) {
+            $("input[name='skyline-opt']").hide()
+                .parent()
+                .toggleClass("checkbox");
+        } else {
+            $("input[name='skyline-opt']").show()
+                .parent()
+                .toggleClass("checkbox");
+        }
+    });
+
 
     $( "#colosseum-range" ).slider({
         range: true,
