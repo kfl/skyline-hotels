@@ -2,16 +2,28 @@
 
 var hotels;
 var skyline;
-function inSkyline(hotel) {
-    return $.grep(skyline, function(e){ return e.id == hotel.id; }).length > 0;
+function inSkyline(hotel, sky) {
+    sky = sky || skyline;
+    return $.grep(sky, function(e){ return e.id == hotel.id; }).length > 0;
 }
 
+function populateList(hs, sky) {
+    var resultOpt = $('input[name=resultOpt]:checked', '#uiOpts').val();
+    if( resultOpt == "highlight" ) {
+        makeHotelListing(hs.slice(0,50));
+    } else {
+        console.log("Pushup");
+        var filtered = $.grep(hs, function(e){ return !inSkyline(e, sky); })
+            .slice(0,50);
+        makeHotelListing( $.merge($.merge([], sky), filtered) );
+    }
+}
 
-function populateList(hs) {
+function makeHotelListing(hs) {
     console.log("Populating list");
     var hlist = $("#hotel-list");
 
-    $(hs.slice(0,50)).each(function(index, item) {
+    $(hs).each(function(index, item) {
         var hotelElm = $(document.createElement('li'))
             .attr("class", "media")
             .html(htmlHotel(item));
@@ -171,15 +183,15 @@ function getHotels() {
                                           function(sky) {
                                               skyline = sky;
                                               clearList();
-                                              populateList(hs);
-                                              populateMap(hs);
+                                              populateList(hs, sky);
+                                              populateMap(hs, sky);
                                           })
                                .fail(showFailure);
                        } else {
                            skyline = [];
                            clearList();
-                           populateList(hs);
-                           populateMap(hs);
+                           populateList(hs, []);
+                           populateMap(hs, []);
                        }
                    })
         .fail(showFailure);
@@ -239,7 +251,17 @@ function deleteHotelOverlays() {
   }
 }
 
-function populateMap(hs) {
+
+function populateMap(hs, sky){
+    var resultOpt = $('input[name=resultOpt]:checked', '#uiOpts').val();
+    if( resultOpt == "highlight" ) {
+        makeMapMarkers(hs);
+    } else {
+        makeMapMarkers(sky);
+    }
+}
+
+function makeMapMarkers(hs) {
     console.log("Populating map");
     deleteHotelOverlays()
     $(hs).each(function(index, hotel) {
@@ -276,6 +298,12 @@ $(function() {
     $("input[name='skyline-opt']").change(function () {
         if($( "#sortby" ).val() == 'skyline')
             getHotels();
+    });
+
+    $('input[name=resultOpt]', '#uiOpts').change(function() {
+        clearList();
+        populateList(hotels, skyline);
+        populateMap(hotels, skyline);
     });
 
     $( "#colosseum-range" ).slider({
