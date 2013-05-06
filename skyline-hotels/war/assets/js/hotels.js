@@ -15,45 +15,11 @@ function populateList(hs) {
         var hotelElm = $(document.createElement('li'))
             .attr("class", "media")
             .html(htmlHotel(item));
-//        var details = hotelDetails(item);
-//        $(".btn", hotelElm).popover({placement: 'left', html:true, content: details});
+
         hlist.append(hotelElm);
     });
 
-    
-    
-    // var listings = d3.select("#hotel-list").selectAll("li")
-    //     .data(hs, function(h) { return h.id; });
-
-    // listings.enter()
-    //       .append("li")
-    //       .attr("class", "media")
-    //       .call(listHotel);
-    // listings.exit()
-    //       .remove();
 }
-
-function listHotel(div){
-    console.log("Make hotel listing");
-    div.append("img")
-        .attr("class","media-object pull-left")
-        .attr("src", function(h) {
-            return /low|high/.test(h.picture) ? 
-                'assets/data/'+h.picture : "assets/data/hotel_images/high/na.jpg";
-        }); 
-    div.append("div")
-        .attr("class","media-body")
-        .each(function(d){
-            d3.select(this)
-                .append("h4")
-                .attr("class","media-heading")
-                .text(d.name);
-            d3.select(this)
-                .append("p")
-                .text(d.address1);
-        });
-}
-
 
 var debug_flag = false; 
 function debug_output(str) {
