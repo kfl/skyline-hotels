@@ -18,20 +18,58 @@ function removeDuplicates(hotels) {
     return res;
 }
 
-
 function populateList(hs, sky) {
     var resultOpt = $('input[name=resultOpt]:checked', '#uiOpts').val();
     if( resultOpt == "highlight" ) {
-        makeHotelListing(hs.slice(0,50));
+        pager(hs);
     } else {
         console.log("Pushup");
-        var filtered = $.grep(hs, function(e){ return !inSkyline(e, sky); })
-            .slice(0,50);
-        makeHotelListing( $.merge($.merge([], sky), filtered) );
+        var filtered = $.grep(hs, function(e){ return !inSkyline(e, sky); });
+        pager( $.merge($.merge([], sky), filtered) );
     }
 }
 
+function pager(hotels) {
+    var offset = 10;
+    function next() {
+        if (! $("#pager-next").hasClass("disabled") ) {
+            console.log('next: '+offset);
+            $("#pager-prev").removeClass("disabled");
+            offset += 10;
+            var hs = hotels.slice(offset, offset + 10);
+            if (offset+10 > hotels.length) {
+                $("#pager-next").addClass("disabled");
+            }
+            makeHotelListing(hs);
+        }
+    }
+
+    function prev() {
+        if (! $("#pager-prev").hasClass("disabled") ) {
+            console.log('prev: '+offset);
+            offset -= 10;
+            var hs = hotels.slice(offset, offset + 10);
+            if (offset-10 < 0) {
+                $("#pager-prev").addClass("disabled");
+            }
+            if (offset+10 > hotels.length) {
+                $("#pager-next").addClass("disabled");
+            } else {
+                $("#pager-next").removeClass("disabled");
+            }
+            makeHotelListing(hs);
+        }
+    }
+
+    prev();
+    $("#pager-next").click(next);
+    $("#pager-prev").click(prev);
+}
+
+
+
 function makeHotelListing(hs) {
+    clearList();
     console.log("Populating list");
     var hlist = $("#hotel-list");
 
@@ -207,14 +245,12 @@ function getHotels() {
                                           query,
                                           function(sky) {
                                               skyline = removeDuplicates(sky);
-                                              clearList();
                                               populateList(hs, skyline);
                                               populateMap(hs, skyline);
                                           })
                                .fail(showFailure);
                        } else {
                            skyline = [];
-                           clearList();
                            populateList(hs, []);
                            populateMap(hs, []);
                        }
