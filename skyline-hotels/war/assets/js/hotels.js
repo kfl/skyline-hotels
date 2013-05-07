@@ -149,8 +149,8 @@ function hotelDetails (hotel) {
             'Price per Night: '+hotel.price.toFixed(2)+'€<br />'+
             'Pool: '+ (hotel.pool ? 'Yes' : 'No') + ', '+
             'Internet: '+ (hotel.pool ? 'Yes' : 'No') + '<br />'+
-            'Distance From Colosseum: '+hotel.distFromColosseum.toFixed(2)+', '+
-            'Distance From Trevi Fountain: '+hotel.distFromTreviFountain.toFixed(2)+', '+
+            'Distance from Colosseum: '+hotel.distFromColosseum.toFixed(2)+', '+
+            'Distance from Trevi Fountain: '+hotel.distFromTreviFountain.toFixed(2)+', '+
             'Distance from the Vatican: '+hotel.distFromVatican.toFixed(2)+'<br />'+
             'Expedia Rating: '+hotel.hotelRating.toFixed(1)+', '+
             'Trip Advisor Rating: '+hotel.tripAdvisorRating.toFixed(1)+''+
