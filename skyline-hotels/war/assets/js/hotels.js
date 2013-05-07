@@ -183,7 +183,8 @@ function scaleToMeters( vals ) {
 
 function showFailure ( jqxhr, textStatus, error ) {
     clearList();
-    var err = jqxhr.status + ' ' + textStatus + ': ' + error;
+    var err = jqxhr.status + ' ' + textStatus + ': ' + error+jqxhr.responseText;
+    console.log(jqxhr.responseText);
     showAlert('<h4>Oh snap, something went wrong</h4>'+err,
               'alert-error');
 }
@@ -424,7 +425,6 @@ $(function() {
         max: 40,
         disabled: true,
         values: [ 0, 40 ],
-//        change: getHotels,
         slide: function( event, ui ) {
             $("#colosseum-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " km");
         }
@@ -439,7 +439,6 @@ $(function() {
         max: 40,
         disabled: true,
         values: [ 0, 40 ],
-//        change: getHotels,
         slide: function( event, ui ) {
             $("#trevi-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " km");
         }
@@ -453,7 +452,6 @@ $(function() {
         max: 25,
         disabled: true,
         values: [ 0, 25 ],
-//        change: getHotels,
         slide: function( event, ui ) {
             $("#proximity-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " km");
         }
@@ -467,12 +465,23 @@ $(function() {
         max: 1300,
         disabled: true,
         values: [ 0, 1300 ],
-//        change: getHotels,
         slide: function( event, ui ) {
             $("#rate-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " €");
         }
     }).on("slidechange", getHotels);
     setupRangeCheckbox( "rate" );
+
+    $( "#stars-range" ).slider({
+        range: "max",
+        min: 1,
+        max: 5,
+        step: 1,
+        disabled: true,
+        slide: function( event, ui ) {
+            $("#stars-lab").text(ui.value);
+        }
+    }).on("slidechange", getHotels);
+    setupRangeCheckbox( "stars" );
 
     $( "#tripad-range" ).slider({
         range: "max",
@@ -480,7 +489,6 @@ $(function() {
         max: 5,
         step: 0.5,
         disabled: true,
-//        change: getHotels,
         slide: function( event, ui ) {
             $("#tripad-lab").text(ui.value);
         }
@@ -493,7 +501,6 @@ $(function() {
         max: 5,
         step: 0.5,
         disabled: true,
-//        change: getHotels,
         slide: function( event, ui ) {
             $("#expedia-lab").text(ui.value);
         }
