@@ -83,7 +83,7 @@ function htmlHotel(hotel){
         '" role="button" class="btn pull-right" data-toggle="modal" >'+
         '<i class="icon-info-sign"></i> Details</a>'+
         '<br />'+
-        'Price per night: '+hotel.price.toFixed(2)+'€<br />'+
+        'Price per Night: '+hotel.price.toFixed(2)+'€<br />'+
         debug_output('(id: '+hotel.id+', order: '+hotel.order+')')+
         '</p></div>'+modalDetails(hotel);
 }
@@ -99,7 +99,7 @@ function hotelDetails (hotel) {
             '</div><div class="span8">'+
             '<p>'+hotel.shortDescription+'</p>'+
             '<p>'+hotel.address1+', '+hotel.postalCode+' '+hotel.city+'<br />'+
-            'Price per night: '+hotel.price.toFixed(2)+'€<br />'+
+            'Price per Night: '+hotel.price.toFixed(2)+'€<br />'+
             'Pool: '+ (hotel.pool ? 'Yes' : 'No') + ', '+
             'Internet: '+ (hotel.pool ? 'Yes' : 'No') + '<br />'+
             'Distance From Colosseum: '+hotel.distFromColosseum.toFixed(2)+', '+
