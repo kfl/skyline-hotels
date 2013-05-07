@@ -19,6 +19,7 @@ function removeDuplicates(hotels) {
 }
 
 function populateList(hs, sky) {
+    $("#hotel-info").text("Found "+hs.length+' hotels, '+sky.length+' suggested.');
     var resultOpt = $('input[name=resultOpt]:checked', '#uiOpts').val();
     if( resultOpt == "highlight" ) {
         pager(hs);
@@ -31,6 +32,12 @@ function populateList(hs, sky) {
 
 function pager(hotels) {
     var offset = 10;
+    $("#pager-prev").removeClass("disabled");
+
+    function showing(len) {
+        $("#pager-info").text("Showing hotels "+(offset+1)+'-'+(offset+len)+' out of '+hotels.length);
+    }
+
     function next() {
         if (! $("#pager-next").hasClass("disabled") ) {
             console.log('next: '+offset);
@@ -40,6 +47,7 @@ function pager(hotels) {
             if (offset+10 > hotels.length) {
                 $("#pager-next").addClass("disabled");
             }
+            showing(hs.length);
             makeHotelListing(hs);
         }
     }
@@ -57,6 +65,7 @@ function pager(hotels) {
             } else {
                 $("#pager-next").removeClass("disabled");
             }
+            showing(hs.length);
             makeHotelListing(hs);
         }
     }
