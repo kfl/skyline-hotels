@@ -40,6 +40,25 @@
          width: 256px;
       }
 
+      .map-details {
+         height: 400px;
+         overflow: auto;
+      }
+
+
+      .list-highlight {
+         border: 1px solid rgb(251, 238, 213);
+         background-color: rgb(252, 248, 227);
+         text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+         border-radius: 4px 4px 4px 4px;
+         color: rgb(192, 152, 83);
+      }
+
+      img.navbar-text {
+         max-height: 20px;
+         width: auto;
+         padding: 10px 15px;
+      }
 
       .ui-slider, .lastcheckbox {
          margin-bottom: 2em;
@@ -47,7 +66,7 @@
 
 
       .ui-slider-horizontal .ui-slider-handle { 
-         width: 15px; 
+         width: 17px; 
          margin-left: -1px;
       }
 
@@ -58,6 +77,11 @@
       .move-rigth{
          display: block;
          float: right;
+      }
+
+      .loading {
+         visibility: hidden;
+         /*display: none;*/
       }
 
       #hotel-list {
@@ -95,9 +119,9 @@
           <a class="brand" href="#">Skyline Hotels</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <!-- <li class="active"><a href="#">Home</a></li> -->
+              <!-- <li><a href="#about">About</a></li> -->
+              <!-- <li><a href="#contact">Contact</a></li> -->
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -109,18 +133,29 @@
         <div class="span4">
           <div id="option-pane" class="well">
             <fieldset>
-              <legend>Location</legend>
-              <label>Distance From Colosseum: <span id="colosseum-lab"></span></label>
+              <legend>Price and Location</legend>
+              <label class="checkbox"><input type="checkbox"
+                                             name="skyline-opt"
+                                             value="price">Price per
+                Night: <span id="rate-lab"></span></label>
+              <div id="rate-range" class="sliderwrapper"></div>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt"
+                  value="distFromColosseum">Distance from
+                  Colosseum: <span id="colosseum-lab"></span></label>
               <div id="colosseum-range" class="sliderwrapper"></div>
 
-              <label>Distance From Trevi Fountain: <span id="trevi-lab"></span></label>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt"
+                  value="distFromTreviFountain">Distance from Trevi
+                  Fountain: <span id="trevi-lab"></span></label>
               <div id="trevi-range" class="sliderwrapper"></div>
 
-              <label>Distance to the Vatican: <span id="proximity-lab"></span></label>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt" value="distFromVatican">Distance
+                  to the
+                  Vatican: <span id="proximity-lab"></span></label>
               <div id="proximity-range" class="sliderwrapper"></div>
-
-              <label>Price per night: <span id="rate-lab"></span></label>
-              <div id="rate-range" class="sliderwrapper"></div>
             </fieldset>
 
             <fieldset>
@@ -135,10 +170,16 @@
               
             <fieldset>
               <legend>Rating</legend>
-              <label>Minimum Expedia Rating: <span id="expedia-lab"></span></label>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt" value="hotelRating">Minimum
+                  Expedia
+                  Rating: <span id="expedia-lab"></span></label>
               <div id="expedia-range" class="sliderwrapper"></div>
 
-              <label>Minimum Trip Advisor Rating: <span id="tripad-lab"></span></label>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt" value="tripAdvisorRating">Minimum
+                  Trip Advisor
+                  Rating: <span id="tripad-lab"></span></label>
               <div id="tripad-range" class="sliderwrapper"></div>
             </fieldset>
 
@@ -183,37 +224,66 @@
               <li class="active"><a href="#listing" data-toggle="pill">Listing</a></li>
               <li class=""><a href="#map" id="tab_map_link" data-toggle="pill">Map</a></li>
             </ul>
-                <!-- <ul class="nav pull-right"> -->
-                <!--   <li class="dropdown"> -->
-                <!--     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Suggested Hotels <b class="caret"></b></a> -->
-                <!--     <ul class="dropdown-menu"> -->
-                <!--       <li><a href="#">Highlight suggested hotels</a></li> -->
-                <!--       <li><a href="#">Show only suggested hotels</a></li> -->
-                <!--     </ul> -->
-                <!--   </li> -->
-                <!-- </ul> -->
-                <form class="navbar-form form-inline pull-right">
-                  <p class="navbar-text"><label class="checkbox">
-                    <input type="checkbox"></input>Only suggested hotels
-                  </label></p>
-                </form>
+                <ul class="nav pull-right">
+                  <li class="disabled"><img id="spinner" class="navbar-text loading" src="assets/img/loading.gif"/></li>
+                  <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Prefs <b class="caret"></b></a>
+                    <ul id="uiOpts" class="dropdown-menu">
+                      <li><a tabindex="-1" href="#"><label class="radio">
+                          <input type="radio" name="resultOpt"
+                          id="resultOptHL" value="highlight"
+                          checked>Highlight only</label></a></li>
+                      <li><a tabindex="-1"
+                          href="#"><label class="radio">
+                          <input type="radio" name="resultOpt"
+                          id="resultOptPU" value="pushup"
+                          />Pushup</label></a></li>
+                      <li class="divider"></li>
+                      <li><a tabindex="-1"
+                          href="#"><label class="radio">
+                          <input type="radio" name="inputOpt"
+                          id="inputOptImp" value="implicit" 
+                          />Implicit</label></a></li>
+                      <li><a tabindex="-1"
+                          href="#"><label class="radio">
+                          <input type="radio" name="inputOpt"
+                          id="inputOptExp" value="explicit" checked
+                          />Explicit</label></a></li>
+                    </ul>
+                  </li>
+                </ul>
+                <!-- <form class="navbar-form form-inline pull-right"> -->
+                <!--   <p class="navbar-text"><label class="checkbox"> -->
+                <!--     <input type="checkbox"></input>Only suggested hotels -->
+                <!--   </label> -->
+
+                <!-- </form> -->
               </div>
             </div>
             <div id="listMapTabContent" class="tab-content">
               <div class="tab-pane fade active in" id="listing">
-                <div class="input-prepend move-right">
+                <div class="input-prepend">
                   <span class="add-on">Order by:</span>
                   <select id="sortby">
                     <option value="default">Default</option>
                     <!-- <option value="skyline">Suggest Best Hotels (skyline)</option> -->
-                    <option value="price-asc">Price per night (lowest first)</option>
+                    <option value="price-asc">Price per Night (lowest first)</option>
                     <option value="distFromColosseum-asc">Distance from Colosseum (shortest first)</option>
                     <option value="distFromTreviFountain-asc">Distance from Trevi Fountain (shortest first)</option>
                     <option value="distFromVatican-asc">Distance to the Vatican (shortest first)</option>
-                    <option value="hotelRating-decs">Expedia Rating (highest first)</option>
-                    <option value="tripAdvisorRating-decs">Trip Advisor Rating (highest first)</option>
-                  </select></div>
+                    <option value="hotelRating-desc">Expedia Rating (highest first)</option>
+                    <option value="tripAdvisorRating-desc">Trip Advisor Rating (highest first)</option>
+                  </select></div><span class="pull-right" id="hotel-info"></span>
                 <ul id="hotel-list" class="media-list">
+                </ul>
+                <ul id="pager" class="pager">
+                  <li id="pager-prev" class="previous">
+                    <a href="#">&larr; Previous</a>
+                  </li>
+                  <li><span id="pager-info"></span></li>
+                  <li id="pager-next" class="next">
+                    <a href="#">Next &rarr;</a>
+                  </li>
                 </ul>
               </div>
               <div class="tab-pane fade" id="map">
