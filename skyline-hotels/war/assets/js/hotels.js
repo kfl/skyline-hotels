@@ -30,22 +30,23 @@ function populateList(hs, sky) {
     }
 }
 
-function pager(hotels) {
+function pager(hts) {
+    var hotels = hts;
     var offset = 10;
-    $("#pager-prev").removeClass("disabled");
+    $(".previous").removeClass("disabled");
 
     function showing(len) {
-        $("#pager-info").text("Showing hotels "+(offset+1)+'-'+(offset+len)+' out of '+hotels.length);
+        $(".pager-info").text("Showing hotels "+(offset+1)+'-'+(offset+len)+' out of '+hotels.length);
     }
 
     function next() {
-        if (! $("#pager-next").hasClass("disabled") ) {
+        if (! $(".next").hasClass("disabled") ) {
             console.log('next: '+offset);
-            $("#pager-prev").removeClass("disabled");
+            $(".previous").removeClass("disabled");
             offset += 10;
             var hs = hotels.slice(offset, offset + 10);
             if (offset+10 > hotels.length) {
-                $("#pager-next").addClass("disabled");
+                $(".next").addClass("disabled");
             }
             showing(hs.length);
             makeHotelListing(hs);
@@ -53,17 +54,17 @@ function pager(hotels) {
     }
 
     function prev() {
-        if (! $("#pager-prev").hasClass("disabled") ) {
+        if (! $(".previous").hasClass("disabled") ) {
             console.log('prev: '+offset);
             offset -= 10;
             var hs = hotels.slice(offset, offset + 10);
             if (offset-10 < 0) {
-                $("#pager-prev").addClass("disabled");
+                $(".previous").addClass("disabled");
             }
             if (offset+10 > hotels.length) {
-                $("#pager-next").addClass("disabled");
+                $(".next").addClass("disabled");
             } else {
-                $("#pager-next").removeClass("disabled");
+                $(".next").removeClass("disabled");
             }
             showing(hs.length);
             makeHotelListing(hs);
@@ -71,8 +72,8 @@ function pager(hotels) {
     }
 
     prev();
-    $("#pager-next").click(next);
-    $("#pager-prev").click(prev);
+    $(".next").click(next);
+    $(".previous").click(prev);
 }
 
 
