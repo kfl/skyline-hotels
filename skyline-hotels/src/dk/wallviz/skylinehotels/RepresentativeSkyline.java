@@ -15,13 +15,13 @@ public class RepresentativeSkyline {
 	
 	Hotel[] execute() {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
-	
+		if (skylineHotels.length==0) return new Hotel[0];
 		// find min/max values
 		minmax = HotelPredicate.fit(skylineHotels);
 		// select one and collect the others in a decent data structure
 		result.add(skylineHotels[0]);
 		Set<Hotel> unprocessed = new HashSet<Hotel>();
-		for (int i=0; i<skylineHotels.length; i++)
+		for (int i=1; i<skylineHotels.length; i++)
 			unprocessed.add(skylineHotels[i]);
 		
 		// Repeat k-1 times (in this case, for all hotels):
