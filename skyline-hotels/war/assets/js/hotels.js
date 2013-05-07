@@ -133,7 +133,8 @@ function htmlHotel(hotel){
         '" role="button" class="btn pull-right" data-toggle="modal" >'+
         '<i class="icon-info-sign"></i> Details</a>'+
         '<br />'+
-        'Price per Night: '+hotel.price.toFixed(0)+'€<br />'+
+        'Price per Night: '+hotel.price.toFixed(0)+'€. '+
+        hotel.stars.toFixed(0)+' stars<br />'+
         debug_output('(id: '+hotel.id+', order: '+hotel.order+')')+
         '</p></div>'+modalDetails(hotel);
 }
@@ -153,7 +154,8 @@ function hotelDetails (hotel) {
             'Distance from Trevi Fountain: '+(hotel.distFromTreviFountain/1000).toFixed(2)+'km <br />'+
             'Distance from the Vatican: '+(hotel.distFromVatican/1000).toFixed(2)+'km <br />'+
             'Expedia Rating: '+hotel.hotelRating.toFixed(1)+', '+
-            'Trip Advisor Rating: '+hotel.tripAdvisorRating.toFixed(1)+''+
+            'Trip Advisor Rating: '+hotel.tripAdvisorRating.toFixed(1)+'<br />'+
+            hotel.stars.toFixed(0)+' stars'+
             '</p>'};
 }
 
@@ -185,7 +187,7 @@ function scaleToMeters( vals ) {
 function showFailure ( jqxhr, textStatus, error ) {
     clearList();
     var err = jqxhr.status + ' ' + textStatus + ': ' + error+jqxhr.responseText;
-    console.log(jqxhr.responseText);
+//    console.log(jqxhr.responseText);
     showAlert('<h4>Oh snap, something went wrong</h4>'+err,
               'alert-error');
 }
@@ -232,8 +234,8 @@ function getHotels() {
                  distFromColosseumEnd: colRange[1],
                  distFromTreviFountainStart: treviRange[0],
                  distFromTreviFountainEnd: treviRange[1],
-                 pool: $("#pool").is(':checked'),
-                 internet: $("#internet").is(':checked'),
+                 pool: $("#pool").is(':checked') || undefined,
+                 internet: $("#internet").is(':checked') || undefined,
                  hotelRatingStart: expedia == 0 ? undefined : expedia,
                  tripAdvisorRatingStart: tripad == 0 ? undefined : tripad
                 };
