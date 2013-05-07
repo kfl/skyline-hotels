@@ -110,7 +110,9 @@ function modalDetails(hotel) {
         '<button type="button" class="close" '+
         'data-dismiss="modal" aria-hidden="true">×</button>'+
         '<h3 id="myModalLabel">'+details.header+'</h3></div>'+
-        '<div class="modal-body">'+details.body+'</div>'+
+        '<div class="modal-body">'+
+        '<div class="row-fluid"><div class="span4">'+details.img+
+        '</div><div class="span8">'+details.body+'</div></div></div>'+
         '<div class="modal-footer">'+
         '<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>'+
         '</div></div>';
@@ -140,10 +142,8 @@ function hotelDetails (hotel) {
     var imgP = /low|high/.test(hotel.picture) ? 
         'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg";
     return {header: hotel.name,
+            img: '<img class="details-img img-rounded" src="'+imgP+'">',
             body:
-            '<div class="row-fluid"><div class="span4">'+
-            '<img class="details-img pull-left img-rounded" src="'+imgP+'">'+
-            '</div><div class="span8">'+
             '<p>'+hotel.shortDescription+'</p>'+
             '<p>'+hotel.address1+', '+hotel.postalCode+' '+hotel.city+'<br />'+
             'Price per Night: '+hotel.price.toFixed(2)+'€<br />'+
@@ -154,7 +154,7 @@ function hotelDetails (hotel) {
             'Distance from the Vatican: '+hotel.distFromVatican.toFixed(2)+'<br />'+
             'Expedia Rating: '+hotel.hotelRating.toFixed(1)+', '+
             'Trip Advisor Rating: '+hotel.tripAdvisorRating.toFixed(1)+''+
-            '</p></div></div>'};
+            '</p>'};
 }
 
 
@@ -213,6 +213,8 @@ function getHotels() {
     clearList();
     showAlert('<h4>Getting Data</h4>Kick back and put your feet up while we work.',
               'alert-info');
+    $("#spinner").css('visibility','visible');
+
 
     var colRange   = getRange( "#colosseum-range", 1000 );
     var treviRange = getRange( "#trevi-range", 1000 );
@@ -256,12 +258,14 @@ function getHotels() {
                                               skyline = removeDuplicates(sky);
                                               populateList(hs, skyline);
                                               populateMap(hs, skyline);
+                                              $("#spinner").css('visibility','hidden');
                                           })
                                .fail(showFailure);
                        } else {
                            skyline = [];
                            populateList(hs, []);
                            populateMap(hs, []);
+                           $("#spinner").css('visibility','hidden');
                        }
                    })
         .fail(showFailure);
@@ -282,8 +286,10 @@ function addHotelMarker(hotel) {
     var details = hotelDetails(hotel);
     
     var infowindow = new google.maps.InfoWindow({
-        content: '<h4>'+details.header+'</h4>'+details.body
+        content: '<div class="map-details"><h4>'+details.header+'</h4><p>'+details.img+'</p>'+details.body+'</div>',
+        maxWidth: 300 
     });
+    if (inSkyline(hotel)) marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
 
     google.maps.event.addListener(marker, 'click', function() {
         infowindow.open(gmap,marker);
