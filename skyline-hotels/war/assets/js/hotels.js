@@ -289,14 +289,13 @@ function addHotelMarker(hotel) {
         content: '<div class="map-details"><h4>'+details.header+'</h4><p>'+details.img+'</p>'+details.body+'</div>',
         maxWidth: 300 
     });
-    if (inSkyline(hotel)) marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
 
     google.maps.event.addListener(marker, 'click', function() {
         infowindow.open(gmap,marker);
     });
 
     markersArray.push(marker);
-
+    return marker;
 }
 
 // Removes the overlays from the map, but keeps them in the array
@@ -340,9 +339,15 @@ function populateMap(hs, sky){
 function makeMapMarkers(hs) {
     console.log("Populating map");
     deleteHotelOverlays()
-    $(hs).each(function(index, hotel) {
-        addHotelMarker(hotel);
+    var sky = []
+    $.each(hs, function(index, hotel) {
+        var marker = addHotelMarker(hotel);
+        if (inSkyline(hotel)) sky.push(marker);
     });
+    $.each(sky, function(i, marker) { marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1); });
+
+    if (sky.length > 0) gmap.panTo(sky[0].getPosition());
+    else if(hs.length > 0) gmap.panTo(new google.maps.LatLng(hs[0].lat, hs[0].lon));
 }
 
 function setupRangeCheckbox( selector ) {
@@ -493,13 +498,9 @@ $(function() {
 
     $('#tab_map_link').on('shown', function (e) {
         google.maps.event.trigger(gmap, 'resize');
+        if(hotels.length > 0) gmap.panTo(new google.maps.LatLng(hotels[0].lat, hotels[0].lon));
     });
 
-    // $(window).resize(function () {
-    //     var h = $(window).height(),
-    //         offsetTop = 190; // Calculate the top offset
-    //     $('#map_canvas').css('height', (h - offsetTop));
-    // }).resize();
 
     // Get an initial list of hotels
     getHotels();
