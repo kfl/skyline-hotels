@@ -7,6 +7,18 @@ function inSkyline(hotel, sky) {
     return $.grep(sky, function(e){ return e.id == hotel.id; }).length > 0;
 }
 
+function removeDuplicates(hotels) {
+    var seen = {}; var res = [];
+    $.each(hotels, function(i, e) {
+        if (!seen[e.id]) {
+            seen[e.id] = true;
+            res.push(e)
+        }
+    });      
+    return res;
+}
+
+
 function populateList(hs, sky) {
     var resultOpt = $('input[name=resultOpt]:checked', '#uiOpts').val();
     if( resultOpt == "highlight" ) {
@@ -62,7 +74,7 @@ function htmlHotel(hotel){
     var imgP = /low|high/.test(hotel.picture) ? 
         'assets/data/'+hotel.picture : "assets/data/hotel_images/high/na.jpg";
     var modalR = modalRef(hotel);
-    var klass = inSkyline(hotel) ? "media-body alert" : "media-body";
+    var klass = inSkyline(hotel) ? "media-body list-highlight" : "media-body";
 
     return '<img class="media-object pull-left img-polaroid" src="'+imgP+'">'+
         '<div class="'+klass+'"><h4 class="media-heading">'+hotel.name+'</h4>'+
@@ -194,10 +206,10 @@ function getHotels() {
                            jQuery.getJSON("/skyline_hotels",
                                           query,
                                           function(sky) {
-                                              skyline = sky;
+                                              skyline = removeDuplicates(sky);
                                               clearList();
-                                              populateList(hs, sky);
-                                              populateMap(hs, sky);
+                                              populateList(hs, skyline);
+                                              populateMap(hs, skyline);
                                           })
                                .fail(showFailure);
                        } else {
