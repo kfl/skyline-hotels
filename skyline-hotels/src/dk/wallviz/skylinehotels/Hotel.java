@@ -125,20 +125,22 @@ class Hotel implements Record {
 	}
 	
 	public static int numStringAtts() {
-		return 6;
+		return 7;
 	}
 
 	public static int numDoubleAtts() {
-		return 8;
+		return 9;
 	}
 
 	public static int numBooleanAtts() {
-		return 2;
+		return 4;
 	}
 
 	public static int getAttribute(String val) {
 		if (val.equals("hotelRating"))
 			return HOTEL_RATING;
+		else if (val.equals("stars"))
+			return STARS;
 		else if (val.equals("tripAdvisorRating"))
 			return TRIP_ADVISOR_RATING;
 		else if (val.equals("price"))
