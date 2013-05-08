@@ -159,6 +159,8 @@ class Hotel implements Record {
 		for (String val: atts) {
 				if (val.equals("hotelRating"))
 					res.add(HOTEL_RATING);
+				else if (val.equals("stars"))
+					res.add(STARS);
 				else if (val.equals("tripAdvisorRating"))
 					res.add(TRIP_ADVISOR_RATING);
 				else if (val.equals("price"))

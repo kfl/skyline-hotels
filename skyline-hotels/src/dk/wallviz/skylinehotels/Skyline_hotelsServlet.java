@@ -109,6 +109,10 @@ public class Skyline_hotelsServlet extends HttpServlet {
 			pred.setMin(Hotel.HOTEL_RATING,Double.parseDouble(val));
 		if ((val = req.getParameter("hotelRatingEnd"))!=null)
 			pred.setMax(Hotel.HOTEL_RATING,Double.parseDouble(val));
+		if ((val = req.getParameter("starsStart"))!=null)
+			pred.setMin(Hotel.STARS,Double.parseDouble(val));
+		if ((val = req.getParameter("starsEnd"))!=null)
+			pred.setMax(Hotel.STARS,Double.parseDouble(val));
 		if ((val = req.getParameter("tripAdvisorRatingStart"))!=null)
 			pred.setMin(Hotel.TRIP_ADVISOR_RATING,Double.parseDouble(val));
 		if ((val = req.getParameter("tripAdvisorRatingEnd"))!=null)
