@@ -30,10 +30,12 @@ function populateList(hs, sky) {
     }
 }
 
-function pager(hts) {
-    var hotels = hts;
+function pager(hotels) {
     var offset = 10;
-    $(".previous").removeClass("disabled");
+    $(".previous")
+        .removeClass("disabled")
+        .off('click');
+    $(".next").off('click');
 
     function showing(len) {
         $(".pager-info").text("Showing hotels "+(offset+1)+'-'+(offset+len)+' out of '+hotels.length);
