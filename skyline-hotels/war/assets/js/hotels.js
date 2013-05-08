@@ -43,7 +43,6 @@ function pager(hotels) {
 
     function next() {
         if (! $(".next").hasClass("disabled") ) {
-            console.log('next: '+offset);
             $(".previous").removeClass("disabled");
             offset += 10;
             var hs = hotels.slice(offset, offset + 10);
@@ -57,7 +56,6 @@ function pager(hotels) {
 
     function prev() {
         if (! $(".previous").hasClass("disabled") ) {
-            console.log('prev: '+offset);
             offset -= 10;
             var hs = hotels.slice(offset, offset + 10);
             if (offset-10 < 0) {
@@ -195,13 +193,11 @@ function showFailure ( jqxhr, textStatus, error ) {
 
 function getSkylineAtts(query) {
     var inputOpt = $('input[name=inputOpt]:checked', '#uiOpts').val();
-    console.log(inputOpt);
 
     if( inputOpt == "implicit" ) {
         var res = [];
         var atts = $.map($("input[name='skyline-opt']"), function(a){
             var e = a.value;
-            console.log(e);
             return (query[e+'Start'] || query[e+'End']) ? e : undefined;
         });
         return atts.filter(function(){return true});
@@ -374,6 +370,15 @@ function setupRangeCheckbox( selector ) {
     });
 }
 
+function showRange(out, unit) {
+    return function( event, ui ) {
+        var options = $(this).slider("option");
+        var txt = (ui.values[0] == options.min) && (ui.values[1] == options.max) ? '' 
+            : ui.values[ 0 ] + " - " + ui.values[ 1 ] + ' ' + unit;
+        $(out).text(txt);
+    }
+}
+
 function resetFilters() {
     $('input[type="checkbox"]').prop('checked', false);
     $('.sliderwrapper').each(function(i,e){
@@ -431,9 +436,7 @@ $(function() {
         max: 40,
         //disabled: true,
         values: [ 0, 40 ],
-        slide: function( event, ui ) {
-            $("#colosseum-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " km");
-        }
+        slide: showRange("#colosseum-lab", 'km')
     }).on("slidechange", getHotels);
 //    setupRangeCheckbox( "colosseum" );
 
@@ -444,9 +447,7 @@ $(function() {
         max: 40,
         //disabled: true,
         values: [ 0, 40 ],
-        slide: function( event, ui ) {
-            $("#trevi-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " km");
-        }
+        slide: showRange("#trevi-lab", "km")
     }).on("slidechange", getHotels);
 //    setupRangeCheckbox( "trevi" );
 
@@ -457,9 +458,7 @@ $(function() {
         max: 25,
         //disabled: true,
         values: [ 0, 25 ],
-        slide: function( event, ui ) {
-            $("#proximity-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " km");
-        }
+        slide: showRange("#proximity-lab", 'km')
     }).on("slidechange", getHotels);
 //    setupRangeCheckbox( "proximity" );
 
@@ -470,9 +469,7 @@ $(function() {
         max: 1300,
         //disabled: true,
         values: [ 0, 1300 ],
-        slide: function( event, ui ) {
-            $("#rate-lab").text(ui.values[ 0 ] + " - " + ui.values[ 1 ] + " €");
-        }
+        slide: showRange("#rate-lab", "€")
     }).on("slidechange", getHotels);
 //    setupRangeCheckbox( "rate" );
 
@@ -483,7 +480,8 @@ $(function() {
         step: 0.5,
         //disabled: true,
         slide: function( event, ui ) {
-            $("#stars-lab").text(ui.value);
+            var options = $(this).slider("option");
+            $("#stars-lab").text(ui.value == options.min ? '' : ui.value);
         }
     }).on("slidechange", getHotels);
 //    setupRangeCheckbox( "stars" );
@@ -495,7 +493,8 @@ $(function() {
         step: 0.5,
         //disabled: true,
         slide: function( event, ui ) {
-            $("#tripad-lab").text(ui.value);
+            var options = $(this).slider("option");
+            $("#tripad-lab").text(ui.value == options.min ? '' : ui.value);
         }
     }).on("slidechange", getHotels);
 //    setupRangeCheckbox( "tripad" );
