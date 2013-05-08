@@ -235,7 +235,7 @@ function getHotels() {
                  distFromTreviFountainEnd: treviRange[1],
                  pool: $("#pool").is(':checked') || undefined,
                  internet: $("#internet").is(':checked') || undefined,
-                 starsStart: stars == 0 ? undefined : expedia,
+                 starsStart: stars == 0 ? undefined : stars,
                  tripAdvisorRatingStart: tripad == 0 ? undefined : tripad
                 };
 
