@@ -153,9 +153,8 @@ function hotelDetails (hotel) {
             'Distance from Colosseum: '+(hotel.distFromColosseum/1000).toFixed(2)+'km <br />'+
             'Distance from Trevi Fountain: '+(hotel.distFromTreviFountain/1000).toFixed(2)+'km <br />'+
             'Distance from the Vatican: '+(hotel.distFromVatican/1000).toFixed(2)+'km <br />'+
-            'Expedia Rating: '+hotel.hotelRating.toFixed(1)+', '+
             'Trip Advisor Rating: '+hotel.tripAdvisorRating.toFixed(1)+'<br />'+
-            hotel.stars.toFixed(0)+' stars'+
+            hotel.stars.toFixed(0)+' stars.'+
             '</p>'};
 }
 
@@ -223,7 +222,7 @@ function getHotels() {
     var treviRange = getRange( "#trevi-range", 1000 );
     var proxRange  = getRange( "#proximity-range", 1000 );
     var rateRange  = getRange( "#rate-range" );
-    var expedia    = $( "#expedia-range" ).slider("value");
+    var stars      = $( "#stars-range" ).slider("value");
     var tripad     = $( "#tripad-range" ).slider("value");
     var sorting    = $( "#sortby" ).val();
     var query = {priceStart: rateRange[0],
@@ -236,7 +235,7 @@ function getHotels() {
                  distFromTreviFountainEnd: treviRange[1],
                  pool: $("#pool").is(':checked') || undefined,
                  internet: $("#internet").is(':checked') || undefined,
-                 hotelRatingStart: expedia == 0 ? undefined : expedia,
+                 starsStart: stars == 0 ? undefined : stars,
                  tripAdvisorRatingStart: tripad == 0 ? undefined : tripad
                 };
 
@@ -476,9 +475,9 @@ $(function() {
 
     $( "#stars-range" ).slider({
         range: "max",
-        min: 1,
+        min: 0,
         max: 5,
-        step: 1,
+        step: 0.5,
         disabled: true,
         slide: function( event, ui ) {
             $("#stars-lab").text(ui.value);
@@ -498,17 +497,17 @@ $(function() {
     }).on("slidechange", getHotels);
     setupRangeCheckbox( "tripad" );
 
-    $( "#expedia-range" ).slider({
-        range: "max",
-        min: 0,
-        max: 5,
-        step: 0.5,
-        disabled: true,
-        slide: function( event, ui ) {
-            $("#expedia-lab").text(ui.value);
-        }
-    }).on("slidechange", getHotels);
-    setupRangeCheckbox( "expedia" );
+    // $( "#expedia-range" ).slider({
+    //     range: "max",
+    //     min: 0,
+    //     max: 5,
+    //     step: 0.5,
+    //     disabled: true,
+    //     slide: function( event, ui ) {
+    //         $("#expedia-lab").text(ui.value);
+    //     }
+    // }).on("slidechange", getHotels);
+    // setupRangeCheckbox( "expedia" );
     
     $("#map_canvas").height($("#option-pane").outerHeight() - $("#listMapTaps").outerHeight(true));
     if(gmap == undefined) {
