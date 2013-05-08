@@ -137,24 +137,24 @@
               <label class="checkbox"><input type="checkbox"
                                              name="skyline-opt"
                                              value="price">Price per
-                Night: <span id="rate-lab"></span></label>
+                Night: <span class="range-lab" id="rate-lab"></span></label>
               <div id="rate-range" class="sliderwrapper"></div>
               <label class="checkbox"><input type="checkbox"
                   name="skyline-opt"
                   value="distFromColosseum">Distance from
-                  Colosseum: <span id="colosseum-lab"></span></label>
+                  Colosseum: <span class="range-lab" id="colosseum-lab"></span></label>
               <div id="colosseum-range" class="sliderwrapper"></div>
 
               <label class="checkbox"><input type="checkbox"
                   name="skyline-opt"
                   value="distFromTreviFountain">Distance from Trevi
-                  Fountain: <span id="trevi-lab"></span></label>
+                  Fountain: <span class="range-lab" id="trevi-lab"></span></label>
               <div id="trevi-range" class="sliderwrapper"></div>
 
               <label class="checkbox"><input type="checkbox"
                   name="skyline-opt" value="distFromVatican">Distance
                   to the
-                  Vatican: <span id="proximity-lab"></span></label>
+                  Vatican: <span class="range-lab" id="proximity-lab"></span></label>
               <div id="proximity-range" class="sliderwrapper"></div>
             </fieldset>
 
@@ -169,17 +169,22 @@
             </fieldset>
               
             <fieldset>
-              <legend>Rating</legend>
+              <legend>Stars and Rating</legend>
+              <label class="checkbox"><input type="checkbox"
+                  name="skyline-opt" value="stars">Minimum
+                number of stars: <span class="range-lab" id="stars-lab"></span></label>
+              <div id="stars-range" class="sliderwrapper"></div>
+
               <label class="checkbox"><input type="checkbox"
                   name="skyline-opt" value="hotelRating">Minimum
                   Expedia
-                  Rating: <span id="expedia-lab"></span></label>
+                  Rating: <span class="range-lab" id="expedia-lab"></span></label>
               <div id="expedia-range" class="sliderwrapper"></div>
 
               <label class="checkbox"><input type="checkbox"
                   name="skyline-opt" value="tripAdvisorRating">Minimum
                   Trip Advisor
-                  Rating: <span id="tripad-lab"></span></label>
+                  Rating: <span class="range-lab" id="tripad-lab"></span></label>
               <div id="tripad-range" class="sliderwrapper"></div>
             </fieldset>
 
@@ -274,14 +279,23 @@
                     <option value="hotelRating-desc">Expedia Rating (highest first)</option>
                     <option value="tripAdvisorRating-desc">Trip Advisor Rating (highest first)</option>
                   </select></div><span class="pull-right" id="hotel-info"></span>
-                <ul id="hotel-list" class="media-list">
-                </ul>
-                <ul id="pager" class="pager">
-                  <li id="pager-prev" class="previous">
+                <ul class="pager">
+                  <li class="previous">
                     <a href="#">&larr; Previous</a>
                   </li>
-                  <li><span id="pager-info"></span></li>
-                  <li id="pager-next" class="next">
+                  <li><span class="pager-info"></span></li>
+                  <li class="next">
+                    <a href="#">Next &rarr;</a>
+                  </li>
+                </ul>
+                <ul id="hotel-list" class="media-list">
+                </ul>
+                <ul class="pager">
+                  <li class="previous">
+                    <a href="#">&larr; Previous</a>
+                  </li>
+                  <li><span class="pager-info"></span></li>
+                  <li class="next">
                     <a href="#">Next &rarr;</a>
                   </li>
                 </ul>
