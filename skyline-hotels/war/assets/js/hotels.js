@@ -38,7 +38,8 @@ function pager(hotels) {
     $(".next").off('click');
 
     function showing(len) {
-        $(".pager-info").text("Showing hotels "+(offset+1)+'-'+(offset+len)+' out of '+hotels.length);
+        $(".pager-info").text("Showing hotels "+(offset+1)+'-'+(offset+len)+
+                              ' out of '+hotels.length);
     }
 
     function next() {
@@ -373,10 +374,17 @@ function setupRangeCheckbox( selector ) {
 function showRange(out, unit) {
     return function( event, ui ) {
         var options = $(this).slider("option");
-        var txt = (ui.values[0] == options.min) && (ui.values[1] == options.max) ? '' 
+        var txt = ui.values[0] == options.min && ui.values[1] == options.max ? '' 
             : ui.values[ 0 ] + " - " + ui.values[ 1 ] + ' ' + unit;
         $(out).text(txt);
-    }
+        
+        if( $('input[name=inputOpt]:checked', '#uiOpts').val() == "implicit" )
+            if( txt == '' ) {
+                $(out).parent().removeClass('in-skyline');
+            } else {
+                $(out).parent().addClass('in-skyline');
+            }
+    };
 }
 
 function resetFilters() {
@@ -394,7 +402,9 @@ function resetFilters() {
             $(this).slider( "disable" );
         $(this).on("slidechange", getHotels);
     });
-    $(".range-lab").text('');
+    $(".range-lab").text('')
+        .parent().removeClass('in-skyline');
+    
 
     getHotels();
 }
