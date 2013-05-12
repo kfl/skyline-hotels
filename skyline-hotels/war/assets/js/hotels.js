@@ -419,6 +419,7 @@ function resetFilters() {
     $(".range-lab").text('')
         .parent().removeClass('in-skyline');
     
+    $('#sortby').val('default');
 
     getHotels();
 }
