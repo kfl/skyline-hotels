@@ -387,6 +387,20 @@ function showRange(out, unit) {
     };
 }
 
+function showSingle(out) {
+    return function( event, ui ) {
+        var options = $(this).slider("option");
+        var elm = $(out); 
+        elm.text(ui.value == options.min ? '' : ui.value);
+        if( $('input[name=inputOpt]:checked', '#uiOpts').val() == "implicit" )
+            if( elm.text() == '' ) {
+                elm.parent().removeClass('in-skyline');
+            } else {
+                elm.parent().addClass('in-skyline');
+            }
+    };
+}
+
 function resetFilters() {
     $('input[type="checkbox"]').prop('checked', false);
     $('.sliderwrapper').each(function(i,e){
@@ -489,10 +503,7 @@ $(function() {
         max: 5,
         step: 0.5,
         //disabled: true,
-        slide: function( event, ui ) {
-            var options = $(this).slider("option");
-            $("#stars-lab").text(ui.value == options.min ? '' : ui.value);
-        }
+        slide: showSingle('#stars-lab')
     }).on("slidechange", getHotels);
 //    setupRangeCheckbox( "stars" );
 
@@ -502,10 +513,7 @@ $(function() {
         max: 5,
         step: 0.5,
         //disabled: true,
-        slide: function( event, ui ) {
-            var options = $(this).slider("option");
-            $("#tripad-lab").text(ui.value == options.min ? '' : ui.value);
-        }
+        slide: showSingle("#tripad-lab")
     }).on("slidechange", getHotels);
 //    setupRangeCheckbox( "tripad" );
 
