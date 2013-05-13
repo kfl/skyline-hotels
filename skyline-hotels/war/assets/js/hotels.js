@@ -518,18 +518,6 @@ $(function() {
     }).on("slidechange", getHotels);
 //    setupRangeCheckbox( "tripad" );
 
-    // $( "#expedia-range" ).slider({
-    //     range: "max",
-    //     min: 0,
-    //     max: 5,
-    //     step: 0.5,
-    //     disabled: true,
-    //     slide: function( event, ui ) {
-    //         $("#expedia-lab").text(ui.value);
-    //     }
-    // }).on("slidechange", getHotels);
-    // setupRangeCheckbox( "expedia" );
-    
     $("#map_canvas").height($("#option-pane").outerHeight() - $("#listMapTaps").outerHeight(true));
     if(gmap == undefined) {
         gmap = new google.maps.Map(d3.select("#map_canvas").node(), {
