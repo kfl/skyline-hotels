@@ -404,16 +404,14 @@ function showSingle(out) {
 function resetFilters() {
     $('input[type="checkbox"]').prop('checked', false);
     $('.sliderwrapper').each(function(i,e){
-        var options = $(this).slider("option");
         $(this).off("slidechange");
+
+        var options = $(this).slider("option");
         if ( typeof(options.range) == "boolean" )
             $(this).slider( "option", "values", [options.min, options.max] );
         else
             $(this).slider( "option", "value", [options.min] );
-        if ( $('input[name="inputOpt"]:checked', '#uiOpts').val() == "implicit")
-            $(this).slider( "enable" );
-        else
-            $(this).slider( "disable" );
+
         $(this).on("slidechange", getHotels);
     });
     $(".range-lab").text('')
